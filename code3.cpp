@@ -161,8 +161,8 @@ bool Jaque ( Tablero tablero ) { // Función la cual revisa si el X (rey) esta e
                 return true; 
             }
         }
-        if ( tablero.piezas_tablero[i].simbolo == T ) {
-            cout << "hola1" << endl;
+        if ( tablero.piezas_tablero[i].simbolo == T ) {    // NO ENTRA EN EL IF
+            cout << "hola1" << endl;                       // Pensaba que había un error con el tablero pero ya ni idea
             if ( Torre(x,y,m,n) ){
                 cout << "hola" << endl;
                 return true; 
