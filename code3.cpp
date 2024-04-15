@@ -18,31 +18,24 @@ struct Tablero {
 };
 
 
-// estructura que guarda los posibles movimientos del rey Ton */
-struct MovRey {
-    int x, y;
-};
-
-
 
 // Función para hacer un arreglo de structs sobre el tablero /* 
 Tablero revisión_tablero() { 
     ifstream archivo; 
     archivo.open("tablero.txt", ios::in); //abrir el archivo en modo lectura */
-    int a;
     Tablero tablero;
     if ( !archivo.is_open() ) {
         cout << "No se ha podido abrir el archivo" << endl;
     }
     else {
-        for ( int i = -1; i < 8; ++i ) { //revisión tablero por filas */
-            if ( i == -1 ) {
+        int a = 0;
+        for ( int i = 0; i < 9; ++i ) { //revisión tablero por filas */
+            if ( i == 0 ) {
                 archivo >> tablero.cantidad_piezas; // guarda el número total de piezas */
                 tablero.piezas_tablero = new Pieza[tablero.cantidad_piezas]; // crea el espacio necesario para las piezas */
             }
             else {
-                char a = 0;
-                for ( int j = 0; j < 8; ++j) { // revisión del tablero por columnas */
+                for ( int j = 1; j < 9; ++j) { // revisión del tablero por columnas */
                     char c;
                     archivo >> c;
                     if (c == 'X') {
@@ -50,7 +43,7 @@ Tablero revisión_tablero() {
                         tablero.piezas_tablero[0].x = j;
                         tablero.piezas_tablero[0].y = i;
                     }
-                    if (c != '.') { // discriminar a los puntos */ 
+                    if (c != '.' && c != 'X') { // discriminar a los puntos */ 
                         tablero.piezas_tablero[a+1].simbolo = c;
                         tablero.piezas_tablero[a+1].x = j;
                         tablero.piezas_tablero[a+1].y = i;
@@ -63,9 +56,6 @@ Tablero revisión_tablero() {
     archivo.close();
     return tablero;
 }
-
-
-
 
 
 
@@ -139,12 +129,13 @@ bool Rey (int a, int b, int c, int d) {  // Movimiento del Rey de Sebastián */
 
 bool Jaque ( Tablero tablero ) { // Función la cual revisa si el X (rey) esta en jaque */
     char P, A, C, K, R, T, X;
-    for ( int i = 1; i < tablero.cantidad_piezas; ++i) { // Defino los valores x,y,,m,n los cuales equivalen a las coordenas x,y de las piezas y el rey respectivamente */
+    for ( int i = 1; i < tablero.cantidad_piezas ; ++i) { // Defino los valores x,y,,m,n los cuales equivalen a las coordenas x,y de las piezas y el rey respectivamente */
         int x = tablero.piezas_tablero[i].x;
         int y = tablero.piezas_tablero[i].y;
         int m = tablero.piezas_tablero[0].x;
         int n = tablero.piezas_tablero[0].y;
-        cout << x << endl;
+        cout << i << endl;
+        cout << x << "," << y << endl;
         if ( tablero.piezas_tablero[i].simbolo == P ) { 
             if ( Peón (x,y,m,n) ){
                 return true;
@@ -152,7 +143,6 @@ bool Jaque ( Tablero tablero ) { // Función la cual revisa si el X (rey) esta e
         }
         if ( tablero.piezas_tablero[i].simbolo == A ) {
             if ( Alfil(x,y,m,n) ){
-                cout << x << endl;
                 return true;
             }
         }
@@ -172,7 +162,9 @@ bool Jaque ( Tablero tablero ) { // Función la cual revisa si el X (rey) esta e
             }
         }
         if ( tablero.piezas_tablero[i].simbolo == T ) {
+            cout << "hola1" << endl;
             if ( Torre(x,y,m,n) ){
+                cout << "hola" << endl;
                 return true; 
             }
         }
@@ -181,17 +173,14 @@ bool Jaque ( Tablero tablero ) { // Función la cual revisa si el X (rey) esta e
 }
 
 
-bool tableroEnJaqueMate (Tablero &tablero) {  // Función que revisa si el tablero esta en jaque mate */
-    Tablero p = &tablero;
+bool tableroEnJaqueMate (Tablero &tablero) {  // Función la cual revisa si el tablero esta en jaque mate */
     int veces_jaque[8] = { 0, 0, 0, 0, 0, 0, 0, 0, };
-    if (  !Jaque ( p ) ){                 // EL ERROR ESTA AQUÍ
-        cout << Jaque ( p ) << endl;     // Por alguna razon la funcion jaque pasa como falsa, lo que hace que automaticamente se apague la funcion
-        cout << true << endl;
+    if (  !Jaque ( tablero ) ){
         return false;
     }
     else{
         char P, A, C, K, R, T, X;
-        int Mov_x[8] = { 1, 1, 1, 0, -1, -1, -1, 0  };    
+        int Mov_x[8] = { 1, 1, 1, 0, -1, -1, -1, 0  };
         int Mov_y[8] = { -1, 0, 1, 1, 1, 0, -1, -1  };
         int X_rey = tablero.piezas_tablero[0].x;
         int Y_rey = tablero.piezas_tablero[0].y;
@@ -200,14 +189,11 @@ bool tableroEnJaqueMate (Tablero &tablero) {  // Función que revisa si el table
             int n = 0;
             m = X_rey + Mov_x[j];
             n = Y_rey + Mov_y[j];
-
-            cout << m << endl;
-
-            if ( m < 0 || m > 8 || n < 0 || n > 8 ) {
+            if ( m < 1 || m > 8 || n < 1 || n > 8 ) {
                 m = X_rey;
                 n = Y_rey;
             }
-            for ( int i = 1; i < tablero.cantidad_piezas; ++i) {    // Utilizé el mismo algoritmo de la funcion jaque, porque tecnicamente era lo mismo solo que mueves al rey
+            for ( int i = 1; i < tablero.cantidad_piezas; ++i) { 
                 int x = tablero.piezas_tablero[i].x;
                 int y = tablero.piezas_tablero[i].y;
                 if ( tablero.piezas_tablero[i].simbolo == P ) { 
@@ -250,9 +236,8 @@ bool tableroEnJaqueMate (Tablero &tablero) {  // Función que revisa si el table
 
 
 int main() {
-    Tablero p;
-    p = revisión_tablero();
-    if ( tableroEnJaqueMate( p ) ) {
+    Tablero tablero = revisión_tablero();
+    if ( tableroEnJaqueMate( tablero ) ) {
         cout << "SI" << endl;
     }
     else {
