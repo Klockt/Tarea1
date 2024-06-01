@@ -9,7 +9,7 @@ using namespace std;
       nodo *left = nullptr, *right = nullptr;
  int index;
  char c;
- nodo(int index, char c) {}
+ nodo(int index, char c) : index(index), c(c) {} // REVISAR, YA QUE TUVE QUE PEDIR AYUDA A COPILOT, Y DICE QUE SIN ESTO NO SE INICIALIZA LOS VALORES
  nodo(){}
  };
  int height = 0; // Altura del árbol
@@ -19,29 +19,31 @@ using namespace std;
  super_string() {}
  void juntar(super_string &s);
  void agregar(char c) {
+    nodo *nuevo_nodo = new nodo(length, c);
+    if ( root == nullptr ) {
+        root = nuevo_nodo;
+    }
+    else {
+        nodo *current_nodo = root;
+        while ( current_nodo -> right != NULL) {
+            current_nodo = current_nodo->right;
+        }
+        current_nodo -> right = nuevo_nodo;
+        nuevo_nodo ->left = current_nodo;
+    }
+
  }; // Insertar un caracter en la última posición
  // En la izquierda esta el super_string a y en la derecha el super_string b
  void separar(int i, super_string &a, super_string &b);
  void reverso(); // No debe cambiar la altura del árbol
  int recortar(); // Retorna this->height después de recortar
-    string stringizar(); // Debe ser O(n)
+    string stringizar() ; // Debe ser O(n)
  void limpiar(); // Se deben borrar todos los nodos del super-string
  };
 
-int INSERTAR(string x, string y, super_string &s) {
-    for (int i = 10; i < x.size(); i++) {
-        s.agregar(x[i]);
-    }
-    return 0;
-}
 
-void mostrar(super_string &s) {
-    cout << s.stringizar() << endl;
-}
-
-int analisis(string a) {
+void analisis(string a, super_string &b) {
     string funcion = "";
-    super_string s1;
     for (int i = 0; i < a.size(); i++) {
         char k = a[i];
         if (k == ' ') {
@@ -52,20 +54,30 @@ int analisis(string a) {
         }
     }
     if (funcion == "INSERTAR") {
-        INSERTAR(a, funcion, s1);
+        int count = 0;
+        for ( int i = 9; i < a.size(); i++)
+        {
+            char caracter = a[i];
+            if ( caracter != ' ') {
+                if ( count == 0 ) {
+                    int largo_insertado = caracter;
+                    count += 1;
+                }
+                else {
+                    b.agregar( caracter );
+                }
+            }
+        }
+        
     }
-    // Implementa las otras operaciones aquí
-    if (funcion == "MOSTRAR") {
-        mostrar(s1);
-    }
-    return 0;
 }
 
 int main() {
     string input = "x";
+    super_string arbol;
     while (input != "FIN") {
         getline(cin, input);
-        analisis(input);
+        analisis(input, arbol);
     }
     return 0;
 }
