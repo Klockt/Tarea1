@@ -25,12 +25,14 @@ using namespace std;
     }
     else {
         nodo *current_nodo = root;
-        while ( current_nodo -> right != NULL) {
+        while ( current_nodo -> right != nullptr) {
             current_nodo = current_nodo->right;
         }
         current_nodo -> right = nuevo_nodo;
         nuevo_nodo ->left = current_nodo;
+        cout << current_nodo -> c << current_nodo -> index << endl;
     }
+    length ++;
 
  }; // Insertar un caracter en la última posición
  // En la izquierda esta el super_string a y en la derecha el super_string b
@@ -69,7 +71,7 @@ void analisis(string a, super_string &b) {
             }
         }
         
-    }
+    }    
 }
 
 int main() {
