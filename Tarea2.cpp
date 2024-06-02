@@ -145,17 +145,22 @@ void analisis(string a, super_string &b){
 }
 
 int main() {
-    fstream archivo;
-    string input;
     super_string arbol;
-    archivo.open( "Algo.txt", ios::in );      // PARA QUE LEA ARCHIVOS 
+    ifstream archivo( "prueba.txt");      // PARA QUE LEA ARCHIVOS 
+    string linea;
     if ( archivo.fail() ){
         cout << "No se pudo abrir el archivo";
     }
-    
-    while (input != "FIN") {
-        getline(archivo, input);
-        analisis(input, arbol);
-    };
+    else {
+        while (getline(archivo,linea)) {
+            if (linea == "FIN") {
+                break;
+            }
+            else {
+                analisis(linea, arbol);
+            }
+        };
+    archivo.close();
+    }
     return 0;
 }
