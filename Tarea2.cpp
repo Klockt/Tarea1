@@ -29,9 +29,10 @@ void super_string::agregar(char c) {  // Insertar un caracter en la última posi
             current_nodo = current_nodo->right;
         }
         current_nodo -> right = nuevo_nodo;
-        //nuevo_nodo ->left = current_nodo;  // NOSE QUE HACE, PERO CUANDO LLAMABA A INORDENREC SE QUEDABA EN BUCLE
     }
     length++;
+    height++;
+    cout << height << endl;
 }
 
 void super_string::juntar(string frase1, string frase2, super_string &s) { // NO ESTOY SEGURO DE QUE TENGA QUE SER DE ESTA FORMA PERO XDD
@@ -47,7 +48,8 @@ void super_string::separar(int i, super_string &a, super_string &b) {  // En la 
 }
 
 
-int super_string::recortar(){  // Retorna this->height después de recortar
+int super_string::recortar() {
+
     return 0;
 }
 
@@ -70,7 +72,6 @@ void super_string::reverso(int inicio , int fin, super_string &b){  // No debe c
     if (inicio == 0 && fin == texto.size() - 1){
         for (fin; fin != -1; fin--){
             char caracter = texto[fin];
-            cout << caracter << endl;
                 nuevo.agregar(caracter);
         }
         b = nuevo;
@@ -141,6 +142,9 @@ void analisis(string a, super_string &b){
         if (iss >> inicio >> fin) {
             b.reverso(inicio, fin, b);
         } 
+    }
+    if ( funcion == "RECORTAR"){
+        
     }
 }
 

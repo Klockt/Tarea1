@@ -9,7 +9,7 @@ class super_string {
             nodo *left = nullptr, *right = nullptr;
             int index;
             char c;
-            nodo(int index, char c) : index(index), c(c) {} // REVISAR, YA QUE TUVE QUE PEDIR AYUDA A COPILOT, Y DICE QUE SIN ESTO NO SE INICIALIZA LOS VALORES
+            nodo(int index, char c) : index(index), c(c) {} 
             nodo(){}
         };
         int height = 0; // Altura del árbol
