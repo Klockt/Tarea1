@@ -13,6 +13,9 @@ void super_string::InOrdenRec( nodo* nodo, string& text){  // Recorre el arbol m
 }
 
 void super_string::limpiarRec( nodo* raiz){     // Elimina el arbol empezando por la hoja izquierda 
+    if ( raiz == nullptr ){
+        return;
+    }
     limpiarRec(raiz->left);
     limpiarRec(raiz->right);
     delete raiz;
@@ -32,7 +35,6 @@ void super_string::agregar(char c) {  // Insertar un caracter en la última posi
     }
     length++;
     height++;
-    cout << height << endl;
 }
 
 void super_string::juntar(super_string &s){
@@ -44,12 +46,20 @@ void super_string::juntar(super_string &s){
 }
 
 void super_string::separar(int i, super_string &a, super_string &b) {  // En la izquierda esta el super_string a y en la derecha el super_string b
-    
+    string original = a.stringizar();
+    string part_a = original.substr(0, i);
+    string part_b = original.substr(i);
+    a.limpiar();
+    b.limpiar();
+    for (char c : part_a) {
+        a.agregar(c);
+    }
+    for (char c : part_b) {
+        b.agregar(c);
+    }
 }
 
-
 int super_string::recortar() {
-
     return 0;
 }
 
@@ -66,17 +76,18 @@ void super_string::limpiar(){  // Se deben borrar todos los nodos del super-stri
     height = 0;
 }
 
-void super_string::reverso(){  // No debe cambiar la altura del árbol
+
+void super_string::reverso(){   // cambia las posiciones dentro de un super string
     string texto = stringizar();
+    int len = texto.length();  
     limpiar();
-    for (int i = length; i != -1; i--){
+    for (int i = len - 1; i >= 0; i--){  
         char caracter = texto[i];
-        cout << caracter << endl;
         agregar(caracter);
     }
 }
 
-void analisis(string a, super_string &b){
+void analisis(string a, super_string &b){ //analisa que funcion procede
     string funcion = "";
     for (int i = 0; i < a.size(); i++) {
         char k = a[i];
@@ -87,7 +98,7 @@ void analisis(string a, super_string &b){
             funcion += k;
         }
     }
-    if (funcion == "INSERTAR"){                      // INSERTAR 
+    if (funcion == "INSERTAR"){ // INSERTAR 
         string aux;
         int f;
         for ( int i = 9; i < a.size(); i++){
@@ -109,31 +120,47 @@ void analisis(string a, super_string &b){
             }
         } 
     }
-    if (funcion == "JUNTAR"){
-        super_string nuevo;
-        for ( int i = 9; i < a.size(); i++){
-            char caracter = a[i];
-            nuevo.agregar(caracter);
-        }
-        b.juntar(nuevo);
-    } 
     if (funcion == "MOSTRAR"){                          // MOSTRAR
         cout<< b.stringizar() << endl;
     }
     if (funcion == "REVERSO"){                         // REVERSO                               
         int inicio, fin;
         string numeros = "";
+        super_string aux1,aux2;
         for( int i = 8; i < a.size(); i++){
+            char caracter = a[i];
+            numeros += caracter;
+        }
+        istringstream iss(numeros); //ahora funciona para substrings
+        if (iss >> inicio >> fin) {
+                b.separar(inicio, b,aux1);
+                b.separar(fin-inicio+1,aux1,aux2);
+                aux1.reverso();
+                b.juntar(aux1);
+                aux1.limpiar();
+                b.juntar(aux2);
+                aux2.limpiar();
+                
+            
+        } 
+    }
+
+    if ( funcion == "ELIMINAR"){ //elimina dentro de un rango
+        int inicio, fin;
+        string numeros = "";
+        super_string aux1,aux2;
+        for ( int i = 9; i < a.size(); i++){
             char caracter = a[i];
             numeros += caracter;
         }
         istringstream iss(numeros);
         if (iss >> inicio >> fin) {
-            b.reverso();
+            b.separar(inicio, b, aux1);
+            b.separar(fin-inicio+1, aux1, aux2);
+            aux1.limpiar();
+            b.juntar(aux2);
+            aux2.limpiar();
         } 
-    }
-    if ( funcion == "RECORTAR"){
-        
     }
 }
 
