@@ -35,11 +35,11 @@ void super_string::agregar(char c) {  // Insertar un caracter en la última posi
     cout << height << endl;
 }
 
-void super_string::juntar(string frase1, string frase2, super_string &s) { // NO ESTOY SEGURO DE QUE TENGA QUE SER DE ESTA FORMA PERO XDD
-    string a = frase1 + frase2;                                            
-    for ( int i = 0; i < a.size(); i++){     // CREO QUE TALVEZ DEBA RECIBIR UN SOLO STRING, ESTE SE AGREGA AL ARBOL ACTUAL Y SE DEVUELVE UN NUEVO SUPERSTRING
-            char caracter = a[i];
-            agregar( caracter );
+void super_string::juntar(super_string &s){
+    string texto = s.stringizar();
+    for ( int i = 0; i < texto.size(); i++){  
+        char caracter = texto[i];
+        agregar( caracter );
     }
 }
 
@@ -66,15 +66,13 @@ void super_string::limpiar(){  // Se deben borrar todos los nodos del super-stri
     height = 0;
 }
 
-void super_string::reverso(int inicio , int fin, super_string &b){  // No debe cambiar la altura del árbol
-    string texto = stringizar();                                   // FALTA EL CASO EN QUE INICIO Y FIN SEAN UN SUBSTRING DEL SUPERSTRNG
-    super_string nuevo;
-    if (inicio == 0 && fin == texto.size() - 1){
-        for (fin; fin != -1; fin--){
-            char caracter = texto[fin];
-                nuevo.agregar(caracter);
-        }
-        b = nuevo;
+void super_string::reverso(){  // No debe cambiar la altura del árbol
+    string texto = stringizar();
+    limpiar();
+    for (int i = length; i != -1; i--){
+        char caracter = texto[i];
+        cout << caracter << endl;
+        agregar(caracter);
     }
 }
 
@@ -111,22 +109,13 @@ void analisis(string a, super_string &b){
             }
         } 
     }
-    if (funcion == "JUNTAR"){                           // JUNTAR !!PUEDE QUE ESTA NO SEA LA FUNCION QUE PIDEN¡¡
-        int donde_insertar = a[7];
+    if (funcion == "JUNTAR"){
         super_string nuevo;
-        string super1 = "", super2 = "";
         for ( int i = 9; i < a.size(); i++){
-            bool flag = true;
             char caracter = a[i];
-            if (caracter == ' '){
-                flag = false;
-            } else if (caracter != ' ' && flag){
-                super1 += caracter;
-            } else if ( !flag ){
-                super2 += caracter;
-            }
+            nuevo.agregar(caracter);
         }
-        nuevo.juntar(super1, super2, nuevo);
+        b.juntar(nuevo);
     } 
     if (funcion == "MOSTRAR"){                          // MOSTRAR
         cout<< b.stringizar() << endl;
@@ -140,7 +129,7 @@ void analisis(string a, super_string &b){
         }
         istringstream iss(numeros);
         if (iss >> inicio >> fin) {
-            b.reverso(inicio, fin, b);
+            b.reverso();
         } 
     }
     if ( funcion == "RECORTAR"){
