@@ -9,7 +9,7 @@ class super_string {
             nodo *left = nullptr, *right = nullptr;
             int index;
             char c;
-            nodo(int index, char c) : index(index), c(c) {} 
+            nodo(int index, char c) : index(index), c(c) {} // REVISAR, YA QUE TUVE QUE PEDIR AYUDA A COPILOT, Y DICE QUE SIN ESTO NO SE INICIALIZA LOS VALORES
             nodo(){}
         };
         int height = 0; // Altura del árbol
@@ -19,12 +19,11 @@ class super_string {
         void limpiarRec(nodo* raiz);
     public:
         super_string() {}
-        void juntar(string frase1, string frase2, super_string &s);
+        void juntar(super_string &s);
         void agregar(char c); // Insertar un caracter en la última posición
         void separar(int i, super_string &a, super_string &b); // En la izquierda esta el super_string a y en la derecha el super_string b
-        void reverso(int inicio , int fin, super_string &b); // No debe cambiar la altura del árbol
+        void reverso(); // No debe cambiar la altura del árbol
         int recortar(); // Retorna this->height después de recortar
         string stringizar(); // Debe ser O(n)
         void limpiar(); // Se deben borrar todos los nodos del super-string
 };
-
