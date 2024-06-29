@@ -1,2 +1,2 @@
-Amaro Alarcón ROL: 202373594-9 Paralelo: 203 funciones: ingresar, separar, main, analisis, recortar.
-Máximo Castillo ROL: 202304518-7 Paralelo: 201 funciones: juntar, inordenrec, limpiar, limpiarrec, stringizar.
+Amaro Alarcón ROL: 202373594-9 Paralelo: 203 funciones: 
+Máximo Castillo ROL: 202304518-7 Paralelo: 201 funciones: 
