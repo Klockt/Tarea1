@@ -100,7 +100,7 @@ void registro_cuentas::estadisticas(){
 
 
 int main() {
-    registro_cuentas rc;
+    registro_cuentas registro;
     fstream archivo;
     archivo.open("pruebas.txt", ios::in);
     if (!archivo) {
@@ -111,18 +111,18 @@ int main() {
     while (archivo >> funcion){
         if (funcion == "AGREGAR"){
             archivo >> rol >> nombre >> descripcion;
-            rc.agregar({rol,nombre,descripcion});
+            registro.agregar({rol,nombre,descripcion});
         }
         else if (funcion == "QUITAR") {
             archivo >> rol;
-            rc.eliminar(rol);
+            registro.eliminar(rol);
         }
         else if (funcion == "ESTADISTICAS") {
-            rc.estadisticas();
+            registro.estadisticas();
         }
         else if (funcion == "OBTENER"){
             archivo >> rol;
-            rc.obtener(rol);
+            registro.obtener(rol);
         }
     }
     archivo.close();
