@@ -14,7 +14,7 @@ class registro_cuentas {
     cuenta* tabla; // Aca se almacenaran los elementos de la tabla
     int ranuras = 15; // Cuantas ranuras tiene la tabla hash (inicialmente)
     int elementos = 0; //revisar ---------------------------
-    int hash(string rol) {
+    int hash(string rol) {// Usamos el metodo de Hashing cerrado lineal, el cual itera hastra encontrar una ranura vacia, esto se observar en Tarea3.cpp
         int hash_val = 0;
         for (char c : rol) {
             hash_val = (hash_val * 31 + c) % ranuras;
@@ -28,7 +28,7 @@ class registro_cuentas {
     registro_cuentas() {
         tabla = new cuenta[ranuras];
     } // (Recuerde que puede crear con distintos parametros)
-    ~registro_cuentas() {
+    ~registro_cuentas() { // destructor de registro de cuentas
         delete[] tabla;
     }
     cuenta obtener(string rol); // Dado el rol, devuelve la cuenta con ese rol
