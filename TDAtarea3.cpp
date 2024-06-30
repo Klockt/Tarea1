@@ -11,13 +11,26 @@ struct cuenta {
 class registro_cuentas {
     private:
     float factor_de_carga = 0.0;
-    cuenta tabla*; // Aca se almacenaran los elementos de la tabla
+    cuenta* tabla; // Aca se almacenaran los elementos de la tabla
     int ranuras = 15; // Cuantas ranuras tiene la tabla hash (inicialmente)
-    int hash(string rol); // Se obtiene el hash dado el rol
-    int p(string rol, int i); // Se otiene la ranura a revisar en caso de colisión dado el rol y el intento i
-
+    int elementos = 0; //revisar ---------------------------
+    int hash(string rol) {
+        int hash_val = 0;
+        for (char c : rol) {
+            hash_val = (hash_val * 31 + c) % ranuras;
+        }
+        return hash_val;
+    } // Se obtiene el hash dado el rol
+    int p(string rol, int i) {
+        return (hash(rol) + i) % ranuras;
+    } // Se otiene la ranura a revisar en caso de colisión dado el rol y el intento i
     public:
-    registro_cuentas() {} // (Recuerde que puede crear con distintos parametros)
+    registro_cuentas() {
+        tabla = new cuenta[ranuras];
+    } // (Recuerde que puede crear con distintos parametros)
+    ~registro_cuentas() {
+        delete[] tabla;
+    }
     cuenta obtener(string rol); // Dado el rol, devuelve la cuenta con ese rol
     void agregar(cuenta c); // Se agrega una cuenta a la tabla
     void eliminar(string rol); // Se elimina la cuenta
