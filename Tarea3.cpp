@@ -28,15 +28,15 @@ void registro_cuentas::redimensionar(int n) {
 cuenta registro_cuentas::obtener(string rol) {
     int i = 0;
     int pos = p(rol, i);
-    while (!tabla[pos].rol.empty() && tabla[pos].rol != rol) {
+    while (!tabla[pos].rol.empty()) {
+        if (tabla[pos].rol == rol) {
+            cout << tabla[pos].nombre + " " << tabla[pos].descripcion << endl;
+            return {"","",""};
+        }
         i++;
         pos = p(rol, i);
     }
-    if (tabla[pos].rol == rol) {
-        return tabla[pos];
-    } else {
-        return {"", "", ""};
-    }
+    return {"","",""};
 }
 
 void registro_cuentas::agregar(cuenta c) {
@@ -107,18 +107,22 @@ int main() {
         cout << "No se logró abrir el archivo" << endl;
         return 0;
     }
-    string funcion, rut, nombre, descripcion;
+    string funcion, rol, nombre, descripcion;
     while (archivo >> funcion){
         if (funcion == "AGREGAR"){
-            archivo >> rut >> nombre >> descripcion;
-            rc.agregar({rut,nombre,descripcion});
+            archivo >> rol >> nombre >> descripcion;
+            rc.agregar({rol,nombre,descripcion});
         }
         else if (funcion == "QUITAR") {
-            archivo >> rut;
-            rc.eliminar(rut);
+            archivo >> rol;
+            rc.eliminar(rol);
         }
         else if (funcion == "ESTADISTICAS") {
             rc.estadisticas();
+        }
+        else if (funcion == "OBTENER"){
+            archivo >> rol;
+            rc.obtener(rol);
         }
     }
     archivo.close();
