@@ -101,7 +101,8 @@ void registro_cuentas::estadisticas(){
 
 int main() {
     registro_cuentas rc;
-    ifstream archivo("pruebas.txt");
+    fstream archivo;
+    archivo.open("pruebas.txt", ios::in);
     if (!archivo) {
         cout << "No se logró abrir el archivo" << endl;
         return 0;
@@ -120,6 +121,7 @@ int main() {
             rc.estadisticas();
         }
     }
+    archivo.close();
     return 0;
 }
 
