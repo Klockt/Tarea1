@@ -11,4 +11,4 @@ class Interprete {
         void ejecutar_programa () ;
         void mostrar_programa_cargado () ;
         void terminar_ejecucion () ;
-}
+};

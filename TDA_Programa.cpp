@@ -12,4 +12,4 @@ class Programa {
         void terminar_programa () ;
         Programa ( int largo_operaciones , int largo_resultado );
         void ejecutar () ;
-}
+};
