@@ -1,3 +1,0 @@
-Amaro Alarcón ROL: 202373594-9 Paralelo: 203 funciones: main, agregar, estadisticas, redimensionar
-Máximo Castillo ROL: 202304518-7 Paralelo: 201 funciones: obtener, eliminar, modificar
-( Ambos trabajamos juntos en el hash y en la gestión de colisicion)

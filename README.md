@@ -14,3 +14,7 @@ Utilizar el compilador g++ en Visual Studio.
 Una vez compilado el proyecto:
 
 1. Usar "./Tarea3", en la terminal dentro de la carpeta.
+
+
+
+arreglar modificar
