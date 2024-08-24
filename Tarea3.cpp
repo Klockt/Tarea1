@@ -12,21 +12,21 @@ int main() {
         cout << "No se encontró el archivo" << endl;
         return 1;
     } 
-    else {
-        int numero, largo_maximo, programas, linea;
-        linea = 0;
-        while (archivo >> numero ) {
-            if (linea == 0) {
-                largo_maximo = numero;
-                linea++;
+    // De esta forma queda más simple, para despues poder leer bien los programas
+    int largo_maximo, cant_programas;
+    Programa programas;
+    archivo >> largo_maximo;
+    archivo >> cant_programas;
+    archivo.ignore();
 
-            }
-            else if (linea == 1) {
-                programas = numero;
-                linea++;
-            }
-        } 
+    // No tengo ni idea de como guardar los programas usando el tda
+    // Si se te ocurre algo avisame :)
+    while (archivo >> programas ) {
     } 
+
+
+    cout << largo_maximo << " y " << programas << endl;
+
     archivo.close();
     return 0;
 }
