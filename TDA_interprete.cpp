@@ -7,6 +7,8 @@ class Interprete {
         int * salida ;
     public :
         Interprete (int cant_programas , int largo_salidas);
+        ~Interprete();
+        void lectura_de_archivo();
         void cargar_programa (int n);
         void ejecutar_programa () ;
         void mostrar_programa_cargado () ;
