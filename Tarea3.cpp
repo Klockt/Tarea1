@@ -39,11 +39,21 @@ void Programa::asignar(int valor, int* salida) {
 }
 
 char Programa::obtener() {
-    return *puntero_operaciones;
+    char list = new char[' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
+                        'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 
+                        'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
+                        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                        'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', 
+                        '7', '8', '9', '.', ':', '+', '-', '<', '>', '[', ']', '!'];
+    if ((*puntero_operaciones) >= 72) {
+        int algo = (*puntero_operaciones) % 72;
+        return lista[algo];
+    }
+    return lista[(*puntero_operaciones)];
 }
 
 void Programa::terminar_programa() {
-    std::cout << "Programa terminado." << std::endl;
+    cout << "Programa terminado." << endl;
 }
 
 void Programa::ejecutar() {
@@ -66,7 +76,6 @@ void Programa::ejecutar() {
         }
         else if (operacion == '['){
             while(*puntero_operaciones == 0){
-
             }
         }
         else if (operacion == '!'){
@@ -112,16 +121,16 @@ void Interprete::ejecutar_programa() { /*Función para ejecutar el programa carg
         }
     }
 
-    void Interprete::mostrar_programa() {
-        if (cargado != -1) {
-            programas[cargado].mostrar();
-        } else {
-            cout << "No hay programa cargado.\n";
-        }
+void Interprete::mostrar_programa() {
+    if (cargado != -1) {
+        programas[cargado].mostrar();
+    } else {
+        cout << "No hay programa cargado.\n";
     }
+}
 
     void Interprete::terminar_ejecucion() {
-        std::cout << "Ejecución terminada.\n";
+        cout << "Ejecución terminada.\n";
     }
 
 int main() {
@@ -164,8 +173,6 @@ int main() {
             cout << "Colocar comando aceptable" << endl;
         }
     }
-// No tengo ni idea de como guardar los programas usando el tda
-// Si se te ocurre algo avisame :)
     archivo.close();
     list.delete();
     return 0;
