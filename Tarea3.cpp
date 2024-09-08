@@ -5,6 +5,12 @@
 #include <string>
 using namespace std;
 
+char list = new char[' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
+                    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 
+                    'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
+                    'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                    'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', 
+                    '7', '8', '9', '.', ':', '+', '-', '<', '>', '[', ']', '!'];
 
 /*Programa*/
 Programa::Programa(int largo_operaciones)
@@ -20,43 +26,6 @@ Programa::~Programa() {
 }
 
 void Programa::ejecutar_operador() {
-    if ( algo >= 72) {
-        algo = algo%72;
-    }
-    return list[algo];
-}
-
-void Programa::mover(char dir) {
-    if (dir == '>') {
-        ++puntero_operaciones;
-    } else if (dir == '<') {
-        --puntero_operaciones;
-    }
-}
-
-void Programa::asignar(int valor, int* salida) {
-    *salida = valor;
-}
-
-char Programa::obtener() {
-    char list = new char[' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
-                        'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 
-                        'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
-                        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-                        'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', 
-                        '7', '8', '9', '.', ':', '+', '-', '<', '>', '[', ']', '!'];
-    if ((*puntero_operaciones) >= 72) {
-        int algo = (*puntero_operaciones) % 72;
-        return lista[algo];
-    }
-    return lista[(*puntero_operaciones)];
-}
-
-void Programa::terminar_programa() {
-    cout << "Programa terminado." << endl;
-}
-
-void Programa::ejecutar() {
     for (int i = 0; i < largo_operaciones; ++i) {
         char operacion = operaciones[i];
         if (operacion == '>' || operacion == '<'){
@@ -72,10 +41,58 @@ void Programa::ejecutar() {
             *puntero_operaciones;
         }
         else if (operacion == ':'){
-            (char)*puntero_operaciones;
+            obtener();
+        }
+    }
+}
+
+void Programa::mover(char dir) {
+    if (dir == '>') {
+        ++puntero_operaciones;
+    } else if (dir == '<') {
+        --puntero_operaciones;
+    }
+}
+
+void Programa::asignar(int valor, int* salida) {
+    *salida = valor;
+}
+
+char Programa::obtener() {
+    if ((*puntero_operaciones) >= 72) {
+        int algo = (*puntero_operaciones) % 72;
+        return lista[algo];
+    }
+    return lista[(*puntero_operaciones)];
+}
+
+void Programa::terminar_programa() {
+    cout << "Programa terminado." << endl;
+}
+
+void Programa::ejecutar() {
+    int pos_while;
+    for (int i = 0; i < largo_operaciones; ++i) {
+        char operacion = operaciones[i];
+        if (operacion == '>' || operacion == '<'){
+            mover(operacion);
+        }
+        else if (operacion == '+'){
+            ++(*puntero_operaciones);
+        }
+        else if (operacion == '-'){
+            --(*puntero_operaciones);
+        }
+        else if (operacion == '.'){
+            *puntero_operaciones;
+        }
+        else if (operacion == ':'){
+            obtener();
         }
         else if (operacion == '['){
-            while(*puntero_operaciones == 0){
+            pos_while = *puntero_operaciones;
+            while(*puntero_operaciones != 0){
+            
             }
         }
         else if (operacion == '!'){
