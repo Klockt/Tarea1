@@ -5,6 +5,7 @@
 #include <string>
 using namespace std;
 
+
 /*Programa*/
 Programa::Programa(int largo_operaciones)
     : largo_operaciones(largo_operaciones) {
@@ -19,13 +20,10 @@ Programa::~Programa() {
 }
 
 void Programa::ejecutar_operador() {
-        char list = new char[' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-                             'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-                             'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-                             'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'V', 'W',
-                             'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8',
-                             '9', '.', ':', '+', '-', '<', '>', '[', ']', '!'];
-        
+    if ( algo >= 72) {
+        algo = algo%72;
+    }
+    return list[algo];
 }
 
 void Programa::mover(char dir) {
@@ -61,16 +59,15 @@ void Programa::ejecutar() {
             --(*puntero_operaciones);
         }
         else if (operacion == '.'){
-
+            *puntero_operaciones;
         }
-        else if (operacion == ','){
-
+        else if (operacion == ':'){
+            (char)*puntero_operaciones;
         }
         else if (operacion == '['){
+            while(*puntero_operaciones == 0){
 
-        }
-        else if (operacion == ']'){
-
+            }
         }
         else if (operacion == '!'){
             terminar_programa();
@@ -97,29 +94,29 @@ Interprete::~Interprete(){
 }
 
 
-void Interprete::cargar_programa(int n) {
-        if (n >= 0 && n < cant_programas) {
-            cargado = n;
-            std::cout << "Programa " << n << " cargado.\n";
+void Interprete::cargar_programa(int n) { /*Función para cargar el programa n*/
+    if (n >= 0 && n < cant_programas) { /*Entra al if si n es >= 0 y n es menor a la cantidad de programas*/
+        cargado = n; /*Iguala la variable n*/
+        cout << "Programa " << n << " cargado.\n";
+    } else {
+        cout << "Número de programa inválido.\n";
+        programas[cargado].mostrar();
+    }
+}
+
+void Interprete::ejecutar_programa() { /*Función para ejecutar el programa cargado*/
+        if (cargado != -1) { /*Entra si hay un programa cargado*/
+            programas[cargado].ejecutar(); /*Llama la funcion ejecutar*/
         } else {
-            std::cout << "Número de programa inválido.\n";
-            programas[cargado].mostrar();
+            cout << "No hay programa cargado.\n";
         }
     }
 
-void Interprete::ejecutar_programa() {
-        if (cargado != -1) {
-            programas[cargado].ejecutar();
-        } else {
-            std::cout << "No hay programa cargado.\n";
-        }
-    }
-
-    void Interprete::mostrar_programa_cargado() {
+    void Interprete::mostrar_programa() {
         if (cargado != -1) {
             programas[cargado].mostrar();
         } else {
-            std::cout << "No hay programa cargado.\n";
+            cout << "No hay programa cargado.\n";
         }
     }
 
@@ -136,27 +133,31 @@ int main() {
     } 
     // De esta forma queda más simple, para despues poder leer bien los programas
     int largo_maximo, cant_programas;
-    Interprete interprete;
     archivo >> largo_maximo;
     archivo >> cant_programas;
     archivo.ignore();
-    Interprete.Interprete(cant_programas, largo_maximo);
+    Interprete interprete(cant_programas, largo_maximo); /*Creador del arreglo con las operaciones*/
+    for (int i = 0; i < cant_programas; i++){ 
+        string operaciones;
+        getline(archivo, operaciones);
+        interprete.programas[i] = operaciones;
+    }
     char comando;
     int a;
     while (true) {
         cin >> comando;
         if (comando == 'c') {
             cin >> a;
-            cargar_programa(a);
+            interprete.cargar_programa(a);
         }
         if (comando == 'e') {
-            ejecutar_programa();
+            interprete.ejecutar_programa();
         }
         if (comando == 'm') {
-            mostrar_programa_();
+            interprete.mostrar_programa();
         }
         if (comando == 's') {
-            terminar_ejecucion();
+            interprete.terminar_ejecucion();
             break;
         }
         else {
@@ -166,5 +167,6 @@ int main() {
 // No tengo ni idea de como guardar los programas usando el tda
 // Si se te ocurre algo avisame :)
     archivo.close();
+    list.delete();
     return 0;
 }
