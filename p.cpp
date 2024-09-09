@@ -35,18 +35,19 @@ public:
         } else if (operacion == '<') {
             mover('<');
         } else if (operacion == '+') {
-            ++(*puntero_operaciones);
+            ++(*salida);
         } else if (operacion == '-') {
-            --(*puntero_operaciones);
+            --(*salida);
         } else if (operacion == '.') {
-            cout << *puntero_operaciones << " "; // Muestra el valor numérico de lo apuntado
+            cout << *salida << " "; // Muestra el valor numérico de lo apuntado
         } else if (operacion == ':') {
-            cout << convertir_a_caracter(*puntero_operaciones); // Muestra el carácter convertido
+            cout << convertir_a_caracter((*salida)); // Muestra el carácter convertido
         } else if (operacion == '[') {
-            if (*puntero_operaciones == 0) {
+            if ((*salida) == 0) {
+                int posicion = (*salida);
                 // Saltar hasta el cierre de bucle ']'
-                while (*puntero_operaciones != ']') {
-                    puntero_operaciones++;
+                while (*salida != 0) {
+                    ejecutar_operador();
                 }
             }
         } else if (operacion == ']') {
@@ -82,11 +83,12 @@ public:
 
     // Función para terminar el programa
     void terminar_programa() {
-        cout << "Programa terminado." << endl;
+        cout << "\n";
     }
 
     // Función para ejecutar todas las operaciones del programa
     void ejecutar() {
+        int* resultado = salida;
         for (int i = 0; i < largo_operaciones; ++i) {
             puntero_operaciones = &operaciones[i];
             ejecutar_operador();
@@ -95,7 +97,7 @@ public:
 
     // Función para convertir un valor numérico a un carácter según una tabla de codificación
     char convertir_a_caracter(int valor) {
-        cout << valor << endl;
+        /*cout << valor << endl;*/
         if (valor >= 72) {
             valor = valor % 72; 
         }
@@ -149,6 +151,9 @@ public:
             programas[i] = new Programa();
         }
         salida = new int[largo_salida];
+        for (int i=0 ;i<largo_salida;i++){
+            salida[i]=0
+        }
     }
 
     // Destructor que libera la memoria asignada
@@ -172,6 +177,7 @@ public:
     // Función para ejecutar el programa cargado
     void ejecutar_programa() {
         if (cargado != -1) {
+            
             programas[cargado]->ejecutar();
         } else {
             cout << "No hay programa cargado" << endl;
