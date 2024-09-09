@@ -18,6 +18,7 @@ public:
 
     ~Programa() {
         delete[] operaciones;
+        delete[] puntero_salida;
         cout << "Destructor llamado" << endl;
     }
 
@@ -105,7 +106,6 @@ public:
     }
 
     void mostrar() {
-        cout << "Programa: ";
         for (int i = 0; i < largo_operaciones; ++i) {
             cout << operaciones[i];
         }
@@ -146,7 +146,6 @@ public:
 
     // Destructor que libera la memoria asignada
     ~Interprete() {
-        cout << "hola funciono bien" << endl;
         delete[] programas;
         delete[] salida;
     }
@@ -180,7 +179,7 @@ public:
 
     // Función para terminar la ejecución del intérprete
     void terminar_ejecucion() {
-        cout << "Ejecución terminada." << endl;
+        cout << "\n"<< endl;
     }
 
     // Función para leer programas desde un archivo
@@ -229,7 +228,6 @@ int main() {
             interprete.mostrar_programa_cargado();
         } else if (comando == 's') {
             interprete.terminar_ejecucion();
-            interprete.~Interprete();
             return 0;
         } else {
             cout << "Colocar comando aceptable" << endl;
