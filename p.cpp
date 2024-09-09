@@ -5,12 +5,13 @@ using namespace std;
 
 class Programa {
 private:
-    int largo_operaciones;
-    char* operaciones;
-    int* salida;
-    char* puntero_operaciones;
+    int largo_operaciones; // Longitud del arreglo de operaciones
+    char* operaciones; // Arreglo de operaciones
+    int* salida; // Arreglo de salida
+    char* puntero_operaciones; // Puntero a la posición actual en el arreglo de operaciones
 
 public:
+    // Constructor que inicializa el programa con un tamaño específico
     Programa(int largo_operaciones = 0)
         : largo_operaciones(largo_operaciones), operaciones(nullptr), salida(nullptr), puntero_operaciones(nullptr) {
         if (largo_operaciones > 0) {
@@ -20,15 +21,47 @@ public:
         }
     }
 
+    // Destructor que libera la memoria asignada
     ~Programa() {
         delete[] operaciones;
         delete[] salida;
     }
 
+    // Función para ejecutar un operador específico
     void ejecutar_operador() {
-        // Implementar la lógica para ejecutar un operador específico
+        char operacion = *puntero_operaciones;
+        if (operacion == '>') {
+            mover('>');
+        } else if (operacion == '<') {
+            mover('<');
+        } else if (operacion == '+') {
+            ++(*puntero_operaciones);
+        } else if (operacion == '-') {
+            --(*puntero_operaciones);
+        } else if (operacion == '.') {
+            cout << *puntero_operaciones << " "; // Muestra el valor numérico de lo apuntado
+        } else if (operacion == ':') {
+            cout << convertir_a_caracter(*puntero_operaciones); // Muestra el carácter convertido
+        } else if (operacion == '[') {
+            if (*puntero_operaciones == 0) {
+                // Saltar hasta el cierre de bucle ']'
+                while (*puntero_operaciones != ']') {
+                    puntero_operaciones++;
+                }
+            }
+        } else if (operacion == ']') {
+            if (*puntero_operaciones != 0) {
+                // Volver al inicio del bucle '['
+                while (*puntero_operaciones != '[') {
+                    puntero_operaciones--;
+                }
+            }
+        } else if (operacion == '!') {
+            terminar_programa();
+        }
     }
 
+    // Función para mover el puntero de operaciones
     void mover(char dir) {
         if (dir == '>' && puntero_operaciones < operaciones + largo_operaciones - 1) {
             ++puntero_operaciones;
@@ -37,42 +70,45 @@ public:
         }
     }
 
+    // Función para asignar un valor a la salida
     void asignar(int valor, int* salida) {
         *salida = valor;
     }
 
+    // Función para obtener el valor en la posición actual del puntero de operaciones
     char obtener() {
         return *puntero_operaciones;
     }
 
+    // Función para terminar el programa
     void terminar_programa() {
-        cout << "Programa terminado." <<    endl;
+        cout << "Programa terminado." << endl;
     }
 
+    // Función para ejecutar todas las operaciones del programa
     void ejecutar() {
         for (int i = 0; i < largo_operaciones; ++i) {
-            char operacion = operaciones[i];
-            if (operacion == '>' || operacion == '<') {
-                mover(operacion);
-            } else if (operacion == '+') {
-                ++(*puntero_operaciones);
-            } else if (operacion == '-') {
-                --(*puntero_operaciones);
-            } else if (operacion == '.') {
-                // Implementar lógica para '.'
-            } else if (operacion == ',') {
-                // Implementar lógica para ','
-            } else if (operacion == '[') {
-                // Implementar lógica para '['
-            } else if (operacion == ']') {
-                // Implementar lógica para ']'
-            } else if (operacion == '!') {
-                terminar_programa();
-                return;
-            }
+            puntero_operaciones = &operaciones[i];
+            ejecutar_operador();
         }
     }
 
+    // Función para convertir un valor numérico a un carácter según una tabla de codificación
+    char convertir_a_caracter(int valor) {
+        cout << valor << endl;
+        if (valor >= 72) {
+            valor = valor % 72; 
+        }
+        char lista[] = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
+                        'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 
+                        'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
+                        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                        'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', 
+                        '7', '8', '9', '.', ':', '+', '-', '<', '>', '[', ']', '!'};
+        return lista[valor];
+    }
+
+    // Función para mostrar el programa
     void mostrar() {
         cout << "Programa: ";
         for (int i = 0; i < largo_operaciones; ++i) {
@@ -81,7 +117,7 @@ public:
         cout << endl;
     }
 
-    // Función para establecer las operaciones
+    // Función para establecer las operaciones del programa
     void set_operaciones(const string& ops) {
         delete[] operaciones;  // Liberar la memoria anterior
         largo_operaciones = ops.size();
@@ -92,19 +128,20 @@ public:
         puntero_operaciones = operaciones;  // Reiniciar el puntero
     }
 
-    // Hacer operaciones accesible para lectura
+    // Función para obtener las operaciones del programa
     char* get_operaciones() const { return operaciones; }
 };
 
 class Interprete {
 private:
-    int cant_programas;
-    int largo_salida;
-    int cargado;
-    Programa** programas;
-    int* salida;
+    int cant_programas; // Cantidad de programas
+    int largo_salida; // Longitud del arreglo de salida
+    int cargado; // Índice del programa cargado actualmente
+    Programa** programas; // Arreglo de punteros a programas
+    int* salida; // Arreglo de salida
 
 public:
+    // Constructor que inicializa el intérprete con una cantidad de programas y longitud de salida específicas
     Interprete(int cant_programas, int largo_salida)
         : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) {
         programas = new Programa*[cant_programas];
@@ -114,6 +151,7 @@ public:
         salida = new int[largo_salida];
     }
 
+    // Destructor que libera la memoria asignada
     ~Interprete() {
         for (int i = 0; i < cant_programas; ++i) {
             delete programas[i];
@@ -122,6 +160,7 @@ public:
         delete[] salida;
     }
 
+    // Función para cargar un programa específico
     void cargar_programa(int n) {
         if (n >= 0 && n < cant_programas) {
             cargado = n;
@@ -130,6 +169,7 @@ public:
         }
     }
 
+    // Función para ejecutar el programa cargado
     void ejecutar_programa() {
         if (cargado != -1) {
             programas[cargado]->ejecutar();
@@ -138,6 +178,7 @@ public:
         }
     }
 
+    // Función para mostrar el programa cargado
     void mostrar_programa_cargado() {
         if (cargado != -1) {
             programas[cargado]->mostrar();
@@ -146,10 +187,12 @@ public:
         }
     }
 
+    // Función para terminar la ejecución del intérprete
     void terminar_ejecucion() {
         cout << "Ejecución terminada." << endl;
     }
 
+    // Función para leer programas desde un archivo
     void lectura_de_archivo(fstream& archivo) {
         for (int i = 0; i < cant_programas; ++i) {
             string operaciones;
@@ -158,7 +201,7 @@ public:
         }
     }
 
-    // Hacer programas accesible para lectura
+    // Función para obtener los programas
     Programa** get_programas() const { return programas; }
 };
 
