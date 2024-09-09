@@ -1,3 +1,5 @@
+#include "TDA_Programa.cpp"
+
 class Interprete {
     private :
         int cant_programas ;

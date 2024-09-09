@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 
-char list = new char[' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
+char* list = new char[' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
                     'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 
                     'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
                     'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
@@ -61,9 +61,9 @@ void Programa::asignar(int valor, int* salida) {
 char Programa::obtener() {
     if ((*puntero_operaciones) >= 72) {
         int algo = (*puntero_operaciones) % 72;
-        return lista[algo];
+        return list[algo];
     }
-    return lista[(*puntero_operaciones)];
+    return list[(*puntero_operaciones)];
 }
 
 void Programa::terminar_programa() {
@@ -111,6 +111,9 @@ void Programa::mostrar() {
 Interprete::Interprete(int cant_programas, int largo_salida)
     : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) {
     programas = new Programa[cant_programas];
+    for (int i = 0; i < cant_programas; ++i) {
+        
+    }
     salida = new int[largo_salida];
 }
 
@@ -138,7 +141,7 @@ void Interprete::ejecutar_programa() { /*Función para ejecutar el programa carg
         }
     }
 
-void Interprete::mostrar_programa() {
+void Interprete::mostrar_programa_cargado() {
     if (cargado != -1) {
         programas[cargado].mostrar();
     } else {
@@ -146,9 +149,13 @@ void Interprete::mostrar_programa() {
     }
 }
 
-    void Interprete::terminar_ejecucion() {
-        cout << "Ejecución terminada.\n";
-    }
+void Interprete::terminar_ejecucion() {
+    cout << "Ejecución terminada.\n";
+}
+
+Programa* Interprete::get_programas() {
+    return programas;
+}
 
 int main() {
     fstream archivo;
@@ -166,7 +173,7 @@ int main() {
     for (int i = 0; i < cant_programas; i++){ 
         string operaciones;
         getline(archivo, operaciones);
-        interprete.programas[i] = operaciones;
+        interprete.get_programas()[i] = operaciones;
     }
     char comando;
     int a;
@@ -180,7 +187,7 @@ int main() {
             interprete.ejecutar_programa();
         }
         if (comando == 'm') {
-            interprete.mostrar_programa();
+            interprete.mostrar_programa_cargado();
         }
         if (comando == 's') {
             interprete.terminar_ejecucion();
@@ -191,6 +198,6 @@ int main() {
         }
     }
     archivo.close();
-    list.delete();
+    delete[] list;
     return 0;
 }

@@ -6,21 +6,21 @@ using namespace std;
 class Programa {
 private:
     int largo_operaciones;
-    char* puntero_operaciones;
-    int* puntero_salida;
     char* operaciones;
+    int* salida;
+    char* puntero_operaciones;
 
 public:
     Programa(int largo_operaciones)
         : largo_operaciones(largo_operaciones) {
         operaciones = new char[largo_operaciones];
+        salida = new int[largo_operaciones];
         puntero_operaciones = operaciones;
-        puntero_salida = new int[largo_operaciones];
     }
 
     ~Programa() {
         delete[] operaciones;
-        delete[] puntero_salida;
+        delete[] salida;
     }
 
     void ejecutar_operador() {
@@ -28,9 +28,9 @@ public:
     }
 
     void mover(char dir) {
-        if (dir == '>') {
+        if (dir == '>' && puntero_operaciones < operaciones + largo_operaciones - 1) {
             ++puntero_operaciones;
-        } else if (dir == '<') {
+        } else if (dir == '<' && puntero_operaciones > operaciones) {
             --puntero_operaciones;
         }
     }
@@ -72,7 +72,18 @@ public:
     }
 
     void mostrar() {
-        cout << "Programa: " << operaciones << endl;
+        cout << "Programa: ";
+        for (int i = 0; i < largo_operaciones; ++i) {
+            cout << operaciones[i];
+        }
+        cout << endl;
+    }
+
+    // Función para establecer las operaciones
+    void set_operaciones(const string& ops) {
+        for (int i = 0; i < largo_operaciones && i < ops.size(); ++i) {
+            operaciones[i] = ops[i];
+        }
     }
 
     // Hacer operaciones accesible para lectura
@@ -84,24 +95,24 @@ private:
     int cant_programas;
     int largo_salida;
     int cargado;
-    Programa** programas;  // Cambiar a un arreglo de punteros
+    Programa** programas;
     int* salida;
 
 public:
     Interprete(int cant_programas, int largo_salida)
         : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) {
-        programas = new Programa*[cant_programas];  // Inicializar el arreglo de punteros
+        programas = new Programa*[cant_programas];
         for (int i = 0; i < cant_programas; ++i) {
-            programas[i] = new Programa(largo_salida);  // Inicializar cada objeto Programa
+            programas[i] = new Programa(largo_salida);
         }
         salida = new int[largo_salida];
     }
 
     ~Interprete() {
         for (int i = 0; i < cant_programas; ++i) {
-            delete programas[i];  // Liberar cada objeto Programa
+            delete programas[i];
         }
-        delete[] programas;  // Liberar el arreglo de punteros
+        delete[] programas;
         delete[] salida;
     }
 
@@ -131,16 +142,14 @@ public:
     }
 
     void terminar_ejecucion() {
-        std::cout << "Ejecución terminada.\n";
+        std::cout << "Ejecución terminada." << std::endl;
     }
 
     void lectura_de_archivo(fstream& archivo) {
         for (int i = 0; i < cant_programas; ++i) {
             string operaciones;
-            getline(archivo, operaciones);
-            for (int j = 0; j < largo_salida && j < operaciones.size(); ++j) {
-                programas[i]->get_operaciones()[j] = operaciones[j];
-            }
+            getline(archivo, operaciones, '!');
+            programas[i]->set_operaciones(operaciones);
         }
     }
 
