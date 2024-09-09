@@ -18,7 +18,6 @@ public:
 
     ~Programa() {
         delete[] operaciones;
-        delete[] puntero_salida;
         cout << "Destructor llamado" << endl;
     }
 
@@ -33,9 +32,9 @@ public:
         } else if (operacion == '-') {
             --(*puntero_salida);
         } else if (operacion == '.') {
-            cout << *puntero_salida << " ";
+            cout << *puntero_salida ;
         } else if (operacion == ':') {
-            cout << convertir_a_caracter((*puntero_salida));
+            cout << obtener();
         } else if (operacion == '[') {
             // Implementar lógica para '['
         } else if (operacion == ']') {
@@ -46,10 +45,10 @@ public:
     }
 
     void mover(char dir) {
-        if (dir == '>' && puntero_operaciones < operaciones + largo_operaciones - 1) {
-            ++puntero_operaciones;
-        } else if (dir == '<' && puntero_operaciones > operaciones) {
-            --puntero_operaciones;
+        if (dir == '>') {
+            ++puntero_salida;
+        } else if (dir == '<') {
+            --puntero_salida;
         } else {
             cout << "Movimiento fuera de límites" << endl;
         }
@@ -60,10 +59,24 @@ public:
     }
 
     char obtener() {
-        return *puntero_operaciones;
+        int valor = (*puntero_salida);
+        if (valor < 0){
+            valor =  valor*-1;
+        }
+        if (valor >= 72) {
+            valor = valor % 72;
+        }
+        char lista[] = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
+                        'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 
+                        'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
+                        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                        'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', 
+                        '7', '8', '9', '.', ':', '+', '-', '<', '>', '[', ']', '!'};
+        return lista[valor];
     }
 
     void terminar_programa() {
+       
         cout << "\n";
     }
 
@@ -76,6 +89,9 @@ public:
     }
 
     char convertir_a_caracter(int valor) {
+        if (valor < 0){
+            valor = valor *-1;
+        }
         if (valor >= 72) {
             valor = valor % 72;
         }
@@ -130,6 +146,7 @@ public:
 
     // Destructor que libera la memoria asignada
     ~Interprete() {
+        cout << "hola funciono bien" << endl;
         delete[] programas;
         delete[] salida;
     }
@@ -212,7 +229,8 @@ int main() {
             interprete.mostrar_programa_cargado();
         } else if (comando == 's') {
             interprete.terminar_ejecucion();
-            break;
+            interprete.~Interprete();
+            return 0;
         } else {
             cout << "Colocar comando aceptable" << endl;
         }
