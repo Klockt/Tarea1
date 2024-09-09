@@ -12,21 +12,8 @@ private:
 
 public:
     Programa(int largo_operaciones = 0)
-        : largo_operaciones(largo_operaciones), operaciones(nullptr), puntero_salida(nullptr), puntero_operaciones(nullptr) {
+        : largo_operaciones(largo_operaciones), operaciones(new char[largo_operaciones]), puntero_salida(new int), puntero_operaciones(nullptr) {
         cout << "Constructor llamado con largo_operaciones = " << largo_operaciones << endl;
-        if (largo_operaciones > 0) {
-            operaciones = new char[largo_operaciones];
-            puntero_salida = new int[largo_operaciones];
-            for (int i = 0; i < largo_operaciones; ++i) {
-                cout << "hoasdl,ald a"<< endl;
-                puntero_salida[i] = 0; // Inicializar el arreglo de salida
-                cout << "hoasdl,ald a"<< endl;
-            }
-            puntero_operaciones = operaciones;
-            cout << "Inicialización completada" << endl;
-        } else {
-            cout << "largo_operaciones es 0 o menor, no se inicializa" << endl;
-        }
     }
 
     ~Programa() {
@@ -81,9 +68,10 @@ public:
     }
 
     void ejecutar() {
+        puntero_operaciones = operaciones;
         for (int i = 0; i < largo_operaciones; ++i) {
-            puntero_operaciones = &operaciones[i];
             ejecutar_operador();
+            ++puntero_operaciones;
         }
     }
 
@@ -121,8 +109,6 @@ public:
     char* get_operaciones() const { return operaciones; }
 };
 
-// Aquí iría el código de la clase Interprete y el main que ya compartiste.
-
 
 
 
@@ -139,10 +125,7 @@ public:
     Interprete(int cant_programas, int largo_salida)
         : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) {
         programas = new Programa[cant_programas];
-        salida = new int[largo_salida];
-        for (int i = 0; i < largo_salida; ++i) {
-            salida[i] = 0;
-        }
+        salida = new int [largo_salida];
     }
 
     // Destructor que libera la memoria asignada
@@ -195,6 +178,7 @@ public:
     // Función para obtener los programas
     Programa* get_programas() const { return programas; }
 };
+
 
 
 int main() {
