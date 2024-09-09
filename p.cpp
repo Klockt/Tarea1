@@ -11,11 +11,13 @@ private:
     char* puntero_operaciones;
 
 public:
-    Programa(int largo_operaciones)
-        : largo_operaciones(largo_operaciones) {
-        operaciones = new char[largo_operaciones];
-        salida = new int[largo_operaciones];
-        puntero_operaciones = operaciones;
+    Programa(int largo_operaciones = 0)
+        : largo_operaciones(largo_operaciones), operaciones(nullptr), salida(nullptr), puntero_operaciones(nullptr) {
+        if (largo_operaciones > 0) {
+            operaciones = new char[largo_operaciones];
+            salida = new int[largo_operaciones];
+            puntero_operaciones = operaciones;
+        }
     }
 
     ~Programa() {
@@ -44,7 +46,7 @@ public:
     }
 
     void terminar_programa() {
-        std::cout << "Programa terminado." << std::endl;
+        cout << "Programa terminado." <<    endl;
     }
 
     void ejecutar() {
@@ -81,9 +83,13 @@ public:
 
     // Función para establecer las operaciones
     void set_operaciones(const string& ops) {
-        for (int i = 0; i < largo_operaciones && i < ops.size(); ++i) {
+        delete[] operaciones;  // Liberar la memoria anterior
+        largo_operaciones = ops.size();
+        operaciones = new char[largo_operaciones];
+        for (int i = 0; i < largo_operaciones; ++i) {
             operaciones[i] = ops[i];
         }
+        puntero_operaciones = operaciones;  // Reiniciar el puntero
     }
 
     // Hacer operaciones accesible para lectura
@@ -103,7 +109,7 @@ public:
         : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) {
         programas = new Programa*[cant_programas];
         for (int i = 0; i < cant_programas; ++i) {
-            programas[i] = new Programa(largo_salida);
+            programas[i] = new Programa();
         }
         salida = new int[largo_salida];
     }
@@ -119,9 +125,8 @@ public:
     void cargar_programa(int n) {
         if (n >= 0 && n < cant_programas) {
             cargado = n;
-            std::cout << "Programa " << n << " cargado.\n";
         } else {
-            std::cout << "Número de programa inválido.\n";
+            cout << "Número de programa inválido" << endl;
         }
     }
 
@@ -129,7 +134,7 @@ public:
         if (cargado != -1) {
             programas[cargado]->ejecutar();
         } else {
-            std::cout << "No hay programa cargado.\n";
+            cout << "No hay programa cargado" << endl;
         }
     }
 
@@ -137,18 +142,18 @@ public:
         if (cargado != -1) {
             programas[cargado]->mostrar();
         } else {
-            std::cout << "No hay programa cargado.\n";
+            cout << "No hay programa cargado" << endl;
         }
     }
 
     void terminar_ejecucion() {
-        std::cout << "Ejecución terminada." << std::endl;
+        cout << "Ejecución terminada." << endl;
     }
 
     void lectura_de_archivo(fstream& archivo) {
         for (int i = 0; i < cant_programas; ++i) {
             string operaciones;
-            getline(archivo, operaciones, '!');
+            getline(archivo, operaciones);
             programas[i]->set_operaciones(operaciones);
         }
     }
