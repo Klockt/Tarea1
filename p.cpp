@@ -18,7 +18,7 @@ public:
 
     ~Programa() {
         delete[] operaciones;
-        delete[] puntero_salida;
+        delete puntero_salida;
         cout << "Destructor llamado" << endl;
     }
 
@@ -35,11 +35,19 @@ public:
         } else if (operacion == '.') {
             cout << *puntero_salida ;
         } else if (operacion == ':') {
-            cout << obtener();
+            cout << obtener();                             
         } else if (operacion == '[') {
-            // Implementar lógica para '['
+            if ((*puntero_salida) == 0) {
+                while (*puntero_operaciones != ']') {
+                    puntero_operaciones++;
+                }
+            }
         } else if (operacion == ']') {
-            // Implementar lógica para ']'
+            if ((*puntero_salida) != 0) {
+                while (*puntero_operaciones != '[') {
+                    puntero_operaciones--;
+                }
+            }
         } else if (operacion == '!') {
             terminar_programa();
         }
@@ -77,32 +85,16 @@ public:
     }
 
     void terminar_programa() {
-       
         cout << "\n";
     }
 
     void ejecutar() {
         puntero_operaciones = operaciones;
-        for (int i = 0; i < largo_operaciones; ++i) {
+        while (*puntero_operaciones != '!'){
             ejecutar_operador();
             ++puntero_operaciones;
         }
-    }
-
-    char convertir_a_caracter(int valor) {
-        if (valor < 0){
-            valor = valor *-1;
-        }
-        if (valor >= 72) {
-            valor = valor % 72;
-        }
-        char lista[] = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
-                        'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 
-                        'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
-                        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-                        'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', 
-                        '7', '8', '9', '.', ':', '+', '-', '<', '>', '[', ']', '!'};
-        return lista[valor];
+        ejecutar_operador();
     }
 
     void mostrar() {
@@ -142,6 +134,10 @@ public:
         : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) {
         programas = new Programa[cant_programas];
         salida = new int [largo_salida];
+
+        for (int i = 0; i < largo_salida; ++i) {
+            salida[i] = 0; // O cualquier valor inicial adecuado
+        }
     }
 
     // Destructor que libera la memoria asignada
