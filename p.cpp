@@ -13,13 +13,13 @@ private:
 public:
     Programa(int largo_operaciones = 0)
         : largo_operaciones(largo_operaciones), operaciones(new char[largo_operaciones]), puntero_salida(new int), puntero_operaciones(nullptr) {
-        cout << "Constructor llamado con largo_operaciones = " << largo_operaciones << endl;
+       
     }
 
     ~Programa() {
         delete[] operaciones;
-        delete puntero_salida;
-        cout << "Destructor llamado" << endl;
+        delete[] puntero_salida;
+      
     }
 
     void ejecutar_operador() {
@@ -134,10 +134,6 @@ public:
         : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) {
         programas = new Programa[cant_programas];
         salida = new int [largo_salida];
-
-        for (int i = 0; i < largo_salida; ++i) {
-            salida[i] = 0; // O cualquier valor inicial adecuado
-        }
     }
 
     // Destructor que libera la memoria asignada
@@ -187,8 +183,6 @@ public:
         }
     }
 
-    // Función para obtener los programas
-    Programa* get_programas() const { return programas; }
 };
 
 
