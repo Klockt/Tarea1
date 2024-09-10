@@ -13,13 +13,11 @@ private:
 public:
     Programa(int largo_operaciones = 0)
         : largo_operaciones(largo_operaciones), operaciones(new char[largo_operaciones]), puntero_salida(new int), puntero_operaciones(nullptr) {
-       
     }
 
     ~Programa() {
         delete[] operaciones;
         delete[] puntero_salida;
-      
     }
 
     void ejecutar_operador() {
@@ -113,8 +111,6 @@ public:
         }
         puntero_operaciones = operaciones;
     }
-
-    char* get_operaciones() const { return operaciones; }
 };
 
 
@@ -131,9 +127,9 @@ private:
 public:
     // Constructor que inicializa el intérprete con una cantidad de programas y longitud de salida específicas
     Interprete(int cant_programas, int largo_salida)
-        : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) {
-        programas = new Programa[cant_programas];
-        salida = new int [largo_salida];
+        : cant_programas(cant_programas), largo_salida(largo_salida), cargado(-1) { // Inicializa las variables cant_programas y largo_salida con sus respectivos valores, y a la variable cargado en -1
+        programas = new Programa[cant_programas]; // Se crea el arreglo programas de tipo Programa con largo igual a la variable cant_programas
+        salida = new int [largo_salida]; // Se crea el arreglo salida de tipo int con largo igual a la variable largo_salida
     }
 
     // Destructor que libera la memoria asignada
@@ -144,7 +140,7 @@ public:
 
     // Función para cargar un programa específico
     void cargar_programa(int n) {
-        if (n >= 0 && n < cant_programas) {
+        if (n >= 0 && n < cant_programas) { // Si la variable n esta entre los valores permitidos entra en el if
             cargado = n;
         } else {
             cout << "Número de programa inválido" << endl;
@@ -153,8 +149,8 @@ public:
 
     // Función para ejecutar el programa cargado
     void ejecutar_programa() {
-        if (cargado != -1) {
-            programas[cargado].ejecutar();
+        if (cargado != -1) { // Revisa que el programa pedido exista
+            programas[cargado].ejecutar(); // Se utiliza el metodo ejecutar en el programa cargado
         } else {
             cout << "No hay programa cargado" << endl;
         }
@@ -162,8 +158,8 @@ public:
 
     // Función para mostrar el programa cargado
     void mostrar_programa_cargado() {
-        if (cargado != -1) {
-            programas[cargado].mostrar();
+        if (cargado != -1) { // Revisa que el programa pedido exista
+            programas[cargado].mostrar(); // Se utiliza el metodo mostrar en el programa cargado
         } else {
             cout << "No hay programa cargado" << endl;
         }
@@ -171,15 +167,15 @@ public:
 
     // Función para terminar la ejecución del intérprete
     void terminar_ejecucion() {
-        cout << "\n"<< endl;
+        cout << "\n"<< endl; // imprime una linea vacia
     }
 
-    // Función para leer programas desde un archivo
-    void lectura_de_archivo(fstream& archivo) {
-        for (int i = 0; i < cant_programas; ++i) {
+    // Función para leer programas desde un archivo, el cual se recibe por referencia
+    void lectura_de_archivo(fstream& archivo) { 
+        for (int i = 0; i < cant_programas; ++i) { // for para poder moverse por el arreglo programas
             string operaciones;
-            getline(archivo, operaciones);
-            programas[i].set_operaciones(operaciones);
+            getline(archivo, operaciones); // Lee una linea completa del archivo en la cual se encuenta un programa completo y se guarda en un string
+            programas[i].set_operaciones(operaciones); // Se utiliza el metodo set_operaciones para el programa i, entregandole el string operaciones
         }
     }
 
@@ -189,37 +185,37 @@ public:
 
 int main() {
     fstream archivo;
-    archivo.open("Programas.txt", ios::in);
-    if (!archivo.is_open()) {
+    archivo.open("Programas.txt", ios::in); // Abre el archivo Programas.txt en modo lectura
+    if (!archivo.is_open()) { // Entra en el if si es que no se encontró el archivo 
         cout << "No se encontró el archivo" << endl;
         return 1;
     }
 
     int largo_maximo, cant_programas;
-    archivo >> largo_maximo;
-    archivo >> cant_programas;
+    archivo >> largo_maximo; // Lee la primera linea del archivo (Largo máximo)
+    archivo >> cant_programas; // Lee la segunda linea del archivo (Cantidad de programas)
     archivo.ignore();
 
-    Interprete interprete(cant_programas, largo_maximo);
-    interprete.lectura_de_archivo(archivo);
+    Interprete interprete(cant_programas, largo_maximo); // Inicializa un tda interprete con las variables leidas del archivo
+    interprete.lectura_de_archivo(archivo); // Utiliza el metodo lectura_de_archivo en el tda interprete, entrgandole el archivo txt 
 
-    archivo.close();
+    archivo.close(); // Cierra el archivo archivo
 
     char comando;
     int a;
-    while (true) {
-        cin >> comando;
-        if (comando == 'c') {
+    while (true) { // While que queda en bucle hasta que se ingrese el input 's'
+        cin >> comando; // Pide un input
+        if (comando == 'c') { // If de cargar progrma 
             cin >> a;
-            interprete.cargar_programa(a);
-        } else if (comando == 'e') {
-            interprete.ejecutar_programa();
-        } else if (comando == 'm') {
-            interprete.mostrar_programa_cargado();
-        } else if (comando == 's') {
-            interprete.terminar_ejecucion();
+            interprete.cargar_programa(a); //Utiliza el metodo cargar_programa en interprete con un parametro int
+        } else if (comando == 'e') { // If de ejecutar programa
+            interprete.ejecutar_programa();//Utiliza el metodo ejecutar_programa en interprete
+        } else if (comando == 'm') { // If de mostrar programa 
+            interprete.mostrar_programa_cargado();//Utiliza el metodo mostrar_programa_cargado en interprete
+        } else if (comando == 's') { // If de terminar ejecucion
+            interprete.terminar_ejecucion();//Utiliza el metodo terminar_ejecucion en interprete
             return 0;
-        } else {
+        } else { // Si el comando ingresado no es correcto entrara en el else
             cout << "Colocar comando aceptable" << endl;
         }
     }
