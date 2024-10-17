@@ -13,8 +13,7 @@ Utilizar el compilador g++ en Visual Studio.
 
 Una vez compilado el proyecto:
 
-1. Usar "./Tarea1", en la terminal dentro de la carpeta.
+1. Usar "./Tarea2", en la terminal dentro de la carpeta.
 
 
 
-arreglar modificar
