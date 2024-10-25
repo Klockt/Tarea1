@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "Director.cpp"
+#include "Director.h"
 #include "Arbol.cpp"
 using namespace std;
 

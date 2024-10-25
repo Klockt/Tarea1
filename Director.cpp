@@ -1,25 +1,19 @@
-struct Pelicula {
-    string nombre ;
-    string director ;
-    float rating ;
+#include "Director.h"
+#include <iostream>
+#include <string>
+
+void Director::agregar_pelicula(){
+
 }
-class Director {
-    private :
-        struct lNodo {
-            Pelicula * val ;
-            lNodo * sig ;
-        };
-        Director () ; // constructor
-        ~ Director () ; // destructor
-        lNodo * head ;
-        lNodo * curr ;
-        lNodo * tail ;
-        size_t size ; // longitud lista
-        string nombre_director ;
-    public :
-        void agregar_pelicula ( Peliculas * pelicula ); // agrega pelicula al final de la lista
-        enlazada
-        void ordenar () ; // ordena la lista
-        void calcular_rating_promedio () ;
-        void mostrar_peliculas () ;
+
+void Director::ordenar(){
+
+}
+
+void Director::calcular_rating_promedio(){
+
+}
+
+void Director::mostrar_peliculas(){
+    
 }
