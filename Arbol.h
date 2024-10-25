@@ -25,3 +25,5 @@ class Arboles {
         void peores_directores ( int n ); // Muestra por pantalla los peores n directores .
         //Enumerando desde m ( cantidad de directores ) hasta m-n.
 };
+
+#endif

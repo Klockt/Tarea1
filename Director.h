@@ -1,11 +1,7 @@
 #ifndef DIRECTOR_H
 #define DIRECTOR_H
+#include <string>
 
-struct Pelicula {
-    string nombre ;
-    string director ;
-    float rating ;
-};
 class Director {
     private :
         struct lNodo {
