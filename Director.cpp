@@ -3,7 +3,21 @@
 #include <string>
 #include <fstream>
 
-void Director::agregar_pelicula( Pelicula * pelicula ){}
+Director::Director(): head(nullptr), curr(nullptr), tail(nullptr), size(0), rating_promedio(0.0){}
+
+void Director::agregar_pelicula( Pelicula * pelicula ){
+        lNodo* nuevo_Nodo = new lNodo;
+        nuevo_Nodo->val = pelicula;
+        nuevo_Nodo->sig = nullptr;
+        if (!head) {
+            head = tail = nuevo_Nodo;
+        }
+        else {
+            tail->sig = nuevo_Nodo;
+            tail = nuevo_Nodo;
+        }
+        size++;
+}
 
 void Director::ordenar(){}
 

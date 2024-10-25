@@ -1,5 +1,6 @@
 #ifndef ARBOL_H
 #define ARBOL_H
+#include "Director.h"
 
 class Arboles {
     private :

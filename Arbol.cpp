@@ -12,8 +12,18 @@ void Arboles::insertar_pelicula( Pelicula * pelicula ){
     Director* dir = buscar_director(pelicula->director);
         if (!dir) {
             dir = new Director();
-            dir->set_nombre_director(pelicula->director);
-            insertar_en_arbol(root_1, dir);
+            dir->nombre_director(pelicula->director);
+            if (!root_1) {
+                root_1 = new aNodo{ dir, nullptr, nullptr };
+                size_1++;
+            } 
+            else if (director->get_nombre_director() < nodo->val->get_nombre_director()) {
+                insertar_en_arbol(nodo->izq, dir);
+            }
+            else {
+                insertar_en_arbol(nodo->der, dir);
+            }
+    
         }
         dir->agregar_pelicula(pelicula);
         dir->ordenar();
@@ -21,7 +31,13 @@ void Arboles::insertar_pelicula( Pelicula * pelicula ){
 
 void Arboles::copiar_arbol(){}
 
-Director * Arboles::buscar_director(){}
+Director * Arboles::buscar_director( string director ){ //no entendi el arreglo de p
+    return buscar_en_arbol(root_1, director);
+}
+
+Director* buscar_en_arbol(aNodo* nodo, const string& director) { //busqueda por recursividad
+        
+    }
 
 void Arboles::mejores_directores( int n ){}
 
