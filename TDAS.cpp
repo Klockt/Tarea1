@@ -47,7 +47,10 @@ void Director::agregar_pelicula( Pelicula * pelicula ){
         size++;
 }
 
-void Director::ordenar(){}
+void Director::ordenar(){
+    if ( )
+
+}
 
 void Director::calcular_rating_promedio(){}
 
@@ -83,6 +86,7 @@ class Arboles {
         //Enumerando de 1 a n.
         void peores_directores ( int n ); // Muestra por pantalla los peores n directores .
         //Enumerando desde m ( cantidad de directores ) hasta m-n.
+        void insertar_alf( aNodo* nodo , Director* director);
 };
 
 
@@ -95,22 +99,26 @@ void Arboles::insertar_pelicula( Pelicula * pelicula ){
     Director* dir = buscar_director(pelicula->director);
         if (!dir) {
             dir = new Director();
-            dir->nombre_director(pelicula->director);
-            if (!root_1) {
-                root_1 = new aNodo{ dir, nullptr, nullptr };
-                size_1++;
-            } 
-            else if (director->get_nombre_director() < nodo->val->get_nombre_director()) {
-                insertar_en_arbol(nodo->izq, dir);
-            }
-            else {
-                insertar_en_arbol(nodo->der, dir);
-            }
-    
+            dir -> nombre_director = pelicula -> director;
+            insertar_alf( root_1, dir);
         }
         dir->agregar_pelicula(pelicula);
         dir->ordenar();
+
 }
+
+void Arboles::insertar_alf( aNodo* nodo , Director* director) { // Inserta los nodos dentro del  arbol 1 alfabeticamente en in-orden
+    if (!nodo){
+        return nullptr;
+    }
+    if ( director -> get_nombre() < nodo -> val -> get_nombre() ){
+        insertar_alf ( nodo -> izq , director);
+    }
+    if ( director -> get_nombre() > nodo -> val -> get_nombre() ){
+            insertar_alf ( nodo -> der , director );
+    }
+}
+
 
 void Arboles::copiar_arbol(){}
 
@@ -122,16 +130,15 @@ Director* buscar_en_arbol(aNodo* nodo , string& dir) {
         if ( nodo == nullptr){
             return nullptr;
         }
-        if ( dir == nodo -> val) {
+        if ( dir == nodo -> val -> get_nombre()) {
             return nodo -> val;
         }
-        if ( dir < nodo -> val ) {
-            return buscar_en_arbol( nodo -> izq , director )
+        if ( dir < nodo -> val -> get_nombre() ) {
+            return buscar_en_arbol( nodo -> izq , dir )
         }
         else {
-            return buscar_en_arbol( nodo -> der, director)
+            return buscar_en_arbol( nodo -> der, dir)
         }
-
 }
 
 void Arboles::mejores_directores( int n ){
