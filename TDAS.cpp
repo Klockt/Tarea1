@@ -27,6 +27,7 @@ class Director {
         void ordenar () ; // ordena la lista
         void calcular_rating_promedio () ;
         void mostrar_peliculas () ;
+        string get_nombre();
 };
 
 
@@ -52,6 +53,9 @@ void Director::calcular_rating_promedio(){}
 
 void Director::mostrar_peliculas(){}
 
+string Director::get_nombre(){
+    return nombre_director;
+}
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 // Arbol ----------------------------------------------------------------------------------------------------------------------------
@@ -82,7 +86,7 @@ class Arboles {
 };
 
 
-Arboles::Arboles():root_1(nullptr), root_2(nullptr), size_1(0), size_2(0) {}
+Arboles::Arboles():root_1(nullptr), root_2(nullptr), curr_1(nullptr), curr_2(nullptr), size_1(0), size_2(0) {}
 
 
 Arboles::~Arboles(){}
@@ -114,8 +118,20 @@ Director * Arboles::buscar_director( string director ){ //no entendi el arreglo 
     return buscar_en_arbol(root_1, director);
 }
 
-Director* buscar_en_arbol(aNodo* nodo, const string& director) { //busqueda por recursividad
-        
+Director* buscar_en_arbol(aNodo* nodo , string& dir) {
+        if ( nodo == nullptr){
+            return nullptr;
+        }
+        if ( dir == nodo -> val) {
+            return nodo -> val;
+        }
+        if ( dir < nodo -> val ) {
+            return buscar_en_arbol( nodo -> izq , director )
+        }
+        else {
+            return buscar_en_arbol( nodo -> der, director)
+        }
+
 }
 
 void Arboles::mejores_directores( int n ){

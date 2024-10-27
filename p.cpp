@@ -1,8 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "Director.h"
-#include "Arbol.h"
+#include "TDAS.cpp"
 using namespace std;
 
 
@@ -26,8 +25,8 @@ int main() {
     archivo.ignore();
     for (int i = 0; i < num_peliculas; i++) {
         getline(archivo, linea);
-        size_t pos1 = linea.find(';'); //busca el caracter ';' y regresa su posicion
-        size_t pos2 = linea.find(';', pos1 + 1); //busca el caracter ';' justo despues del anterior
+        int pos1 = linea.find(';'); //busca el caracter ';' y regresa su posicion
+        int pos2 = linea.find(';', pos1 + 1); //busca el caracter ';' justo despues del anterior
         Pelicula* pelicula = new Pelicula(); //crea el espacio de Pelicula
         pelicula->nombre = linea.substr(0, pos1); //obtiene el nombre de la pelicula
         pelicula->director = linea.substr(pos1 + 1, pos2 - pos1 - 1); //obtiene el nombre del director
