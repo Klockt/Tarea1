@@ -20,6 +20,7 @@ class Director {
         lNodo * tail ;
         size_t size ; // longitud lista
         string nombre_director ;
+        float rating_promedio ;
     public :
         Director () ; // constructor
         ~ Director () ; // destructor
@@ -48,13 +49,48 @@ void Director::agregar_pelicula( Pelicula * pelicula ){
 }
 
 void Director::ordenar(){
-    if ( )
-
+    if (!head || !head->sig) return; // Si la lista está vacía o tiene solo un elemento, no necesita ordenarse.
+    lNodo* sorted = nullptr; // Lista para almacenar los elementos ordenados.
+    while (head != nullptr) {
+        lNodo* aux = head;    // Toma el primer nodo de la lista original.
+        head = head->sig;     // Actualiza el head para que apunte al siguiente nodo.
+        // Inserta el nodo en la posición correcta en la lista ordenada.
+        if (!sorted || aux->val->get_nombre() < sorted->val->get_nombre()) {
+            aux->sig = sorted;
+            sorted = aux;
+        } else {
+            lNodo* temp = sorted;
+            while (temp->sig != nullptr && temp->sig->val->get_nombre() < aux->val->get_nombre()) {
+                temp = temp->sig;
+            }
+            aux->sig = temp->sig;
+            temp->sig = aux;
+        }
+    }
+    head = sorted;
 }
 
-void Director::calcular_rating_promedio(){}
+void Director::calcular_rating_promedio(){
+    if (!head) return;
+    float suma_ratings = 0.0;
+    int contador = 0;
+    lNodo* temp = head;
+    while (temp != nullptr) {
+        suma_ratings += temp->val->rating; 
+        contador++;
+        temp = temp->sig; 
+    }
+    rating_promedio = suma_ratings / contador; 
+}
 
-void Director::mostrar_peliculas(){}
+void Director::mostrar_peliculas(){
+    lNodo* temp = head;
+    while(temp != nullptr){
+        cout << temp->val->nombre << " ";
+        temp = temp->sig;
+    }
+    cout << endl;
+}
 
 string Director::get_nombre(){
     return nombre_director;
@@ -87,6 +123,7 @@ class Arboles {
         void peores_directores ( int n ); // Muestra por pantalla los peores n directores .
         //Enumerando desde m ( cantidad de directores ) hasta m-n.
         void insertar_alf( aNodo* nodo , Director* director);
+        Director* buscar_en_arbol(aNodo* nodo , string& dir)
 };
 
 
@@ -126,7 +163,7 @@ Director * Arboles::buscar_director( string director ){ //no entendi el arreglo 
     return buscar_en_arbol(root_1, director);
 }
 
-Director* buscar_en_arbol(aNodo* nodo , string& dir) {
+Director* Arboles::buscar_en_arbol(aNodo* nodo , string& dir) {
         if ( nodo == nullptr){
             return nullptr;
         }
