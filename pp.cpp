@@ -1,5 +1,6 @@
-#include <string>
 #include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
 
 struct Pelicula {
@@ -62,27 +63,31 @@ void Director::agregar_pelicula( Pelicula * pelicula ){
         size++;
 }
 
-void Director::ordenar(){
+void Director::ordenar() {
     if (!head || !head->sig) return; // Si la lista está vacía o tiene solo un elemento, no necesita ordenarse.
-    lNodo* ayuda = nullptr; // Lista para almacenar los elementos ordenados.
+    
+    lNodo* sorted = nullptr; // Lista para almacenar los elementos ordenados.
+    
     while (head != nullptr) {
-        lNodo* aux = head;    // Toma el primer nodo de la lista original.
-        head = head->sig;     // Actualiza el head para que apunte al siguiente nodo.
-        // Inserta el nodo en la posición correcta en la lista ordenada.
-        if ( ayuda || aux->val->nombre < ayuda -> val-> nombre) {
-            aux->sig = ayuda;
-         ayuda = aux;
+        lNodo* aux = head;
+        head = head->sig;
+
+        // Insertar el nodo en la posición correcta en la lista ordenada
+        if (!sorted || aux->val->nombre < sorted->val->nombre) {
+            aux->sig = sorted;
+            sorted = aux;
         } else {
-            lNodo* temp = ayuda;
-            while (temp->sig != nullptr && temp->sig->val -> nombre < ayuda -> val-> nombre) {
+            lNodo* temp = sorted;
+            while (temp->sig != nullptr && temp->sig->val->nombre < aux->val->nombre) {
                 temp = temp->sig;
             }
             aux->sig = temp->sig;
             temp->sig = aux;
         }
     }
-    head = ayuda;
+    head = sorted;
 }
+
 
 void Director::calcular_rating_promedio(){
     if (!head) return;
@@ -110,8 +115,8 @@ string Director::get_nombre(){
     return nombre_director;
 }
 
-void Director::colocar_nombre_director( string dir ){
-    nombre_director = dir;
+void Director::colocar_nombre_director( string director ){
+    nombre_director = director;
     return;
 }
 
@@ -145,12 +150,15 @@ class Arboles {
         //Enumerando de 1 a n.
         void peores_directores ( int n ); // Muestra por pantalla los peores n directores .
         //Enumerando desde m ( cantidad de directores ) hasta m-n.
-        void insertar_alf( aNodo* nodo , Director* director);
+        void insertar_alf( aNodo*& nodo , Director* director, aNodo* &curr);
         Director* buscar_en_arbol(aNodo* nodo , string& dir);
         void delete_recursivo(aNodo* nodo);
         void copia_preOrden(aNodo* original, aNodo* copia);
         void mejores_directores_HELP(aNodo* nodo, int& count, int n );
         void peores_directores_HELP(aNodo* nodo, int& count, int n);
+  
+
+
 };
 
 
@@ -173,27 +181,30 @@ void Arboles::delete_recursivo(aNodo* nodo) { //Supongo que la copia del arbol t
 
 void Arboles::insertar_pelicula( Pelicula * pelicula ){
     Director* dir = buscar_director(pelicula->director);
-        if (!dir) {
+        if (dir == nullptr) {
             dir = new Director();
             dir -> colocar_nombre_director(pelicula -> director);
-            insertar_alf(root_1, dir);
+            insertar_alf(root_1, dir, curr_1);
         }
         dir->agregar_pelicula(pelicula);
         dir->ordenar();
 
 }
 
-void Arboles::insertar_alf( aNodo* nodo , Director* director) { // Inserta los nodos dentro del  arbol 1 alfabeticamente en in-orden
-    if (!nodo){
-        nodo = new aNodo{ director, nullptr, nullptr};
+void Arboles::insertar_alf(aNodo*& nodo, Director* director, aNodo* &curr) {
+    if (nodo == nullptr) {
+        nodo = new aNodo{ director, nullptr, nullptr };
+        curr = nodo;
+        return;
     }
-    if ( director -> get_nombre() < nodo -> val -> get_nombre() ){
-        insertar_alf ( nodo -> izq , director);
-    }
-    if ( director -> get_nombre() > nodo -> val -> get_nombre() ){
-            insertar_alf ( nodo -> der , director );
+    
+    if (director->get_nombre() < nodo->val->get_nombre()) {
+        insertar_alf(nodo->izq, director, nodo->izq);
+    } else if (director->get_nombre() > nodo->val->get_nombre()) {
+        insertar_alf(nodo->der, director, nodo->der);
     }
 }
+
 
 
 void Arboles::copiar_arbol(){
@@ -206,7 +217,7 @@ void Arboles::copia_preOrden(aNodo* original, aNodo* copia){
     }
     Director* nDirector = new Director(*original -> val);
     nDirector -> calcular_rating_promedio();
-    insertar_alf(copia, nDirector);
+    insertar_alf(copia, nDirector, curr_2);
     copia_preOrden(original->izq, copia);
     copia_preOrden(original->der, copia);
 }
@@ -237,7 +248,10 @@ void Arboles::mejores_directores(int n) {
 }
 
 void Arboles::mejores_directores_HELP(aNodo* nodo, int& count, int n) {
-    if (!nodo || count >= n) return;
+    if (!nodo || count >= n){
+        cout << count << endl;
+     return;
+    }
     mejores_directores_HELP(nodo->der, count, n);
     if (count < n) {
         cout << "(" << (count + 1) << ") " << nodo->val->get_nombre() << " - Rating Promedio: " << nodo->val->get_rank() << endl;
@@ -263,3 +277,102 @@ void Arboles::peores_directores_HELP(aNodo* nodo, int& count, int n) {
 }
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+
+// Estructuras y Clases deben estar definidas en TDAS.cpp
+// Aquí solo está el código principal que usa esas estructuras
+
+int main() {
+    ifstream archivo("Peliculas.txt");
+    if (!archivo) {
+        cout << "No se logró encontrar el archivo" << endl;
+        return 1;
+    }
+
+    Arboles arbol;
+    string linea;
+    int cant_peliculas;
+
+    // Leer la cantidad de películas
+    archivo >> cant_peliculas;
+    archivo.ignore();
+
+    // Leer las películas y almacenarlas en el árbol
+    for (int i = 0; i < cant_peliculas; i++) {
+        getline(archivo, linea);
+        int pos1 = linea.find(';'); // Busca el carácter ';' y regresa su posición
+        int pos2 = linea.find(';', pos1 + 1); // Busca el carácter ';' justo después del anterior
+        
+        Pelicula* pelicula = new Pelicula(); // Crea el espacio para Pelicula
+        pelicula->nombre = linea.substr(0, pos1); // Obtiene el nombre de la película
+        pelicula->director = linea.substr(pos1 + 1, pos2 - pos1 - 1); // Obtiene el nombre del director
+        pelicula->rating = stof(linea.substr(pos2 + 1)); // Obtiene el rating
+
+        arbol.insertar_pelicula(pelicula); // Inserta la película en el árbol
+    }
+
+    archivo.close();
+    
+    // Copiar el árbol para ordenarlo por rating promedio
+    arbol.copiar_arbol();
+
+    string comando;
+    while (true) {
+        cout << "> ";
+        getline(cin, comando);
+
+        // Buscar películas por director
+        if (comando.substr(0, 2) == "sd") {
+            string nombre_director = comando.substr(3);
+            Director* director = arbol.buscar_director(nombre_director);
+            if (director) {
+                director->mostrar_peliculas();
+            } else {
+                cout << "Director no encontrado." << endl;
+            }
+        }
+
+        // Buscar película específica (si decides implementar la función buscar_pelicula)
+        else if (comando.substr(0, 2) == "sm") {
+            /*string nombre_pelicula = comando.substr(3);
+            Pelicula* pelicula = arbol.buscar_pelicula(nombre_pelicula);
+            if (pelicula) {
+                cout << pelicula->nombre << " / " << pelicula->director << " / " << pelicula->rating << endl;
+            } else {
+                cout << "Película no encontrada." << endl;
+            }*/
+        }
+
+        // Mostrar los mejores directores según el rating promedio
+        else if (comando.substr(0, 2) == "br") {
+            try {
+                int n = stoi(comando.substr(3));
+                arbol.mejores_directores(n);
+            } catch (const invalid_argument& e) {
+                cout << "Comando no válido. Debe seguir el formato: br <n>" << endl;
+            }
+        }
+
+        // Mostrar los peores directores según el rating promedio
+        else if (comando.substr(0, 2) == "wr") {
+            try {
+                int n = stoi(comando.substr(3));
+                arbol.peores_directores(n);
+            } catch (const invalid_argument& e) {
+                cout << "Comando no válido. Debe seguir el formato: wr <n>" << endl;
+            }
+        }
+
+        // Terminar la ejecución del programa
+        else if (comando.substr(0, 1) == "e") {
+            break;
+        }
+
+        // Comando no reconocido
+        else {
+            cout << "Comando no reconocido." << endl;
+        }
+    }
+
+    return 0;
+}
