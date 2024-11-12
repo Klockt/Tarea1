@@ -1,52 +1,37 @@
 #ifndef CLASS_H
 #define CLASS_H
+#include <string>
 
-/* Funciones clase Pedido */
+struct Plato{
+    std::string nombre;
+    int precio;
+};
 
-//  Constructor Pedido
-Pedido::Pedido(){
+class Pedido{
+    private:
+        Plato* platos; // arreglo de platos en el pedido, tamaño inicial 25
+        bool servir; // true para servir, false para llevar
+        size_t cant_platos;
+    public:
+        Pedido();
+        ~Pedido();
+        void agregar_plato(Plato* plato); // agrega un plato al pedido
+        int precio_total(); // retorna la suma del precio de todos los platos del pedido
+};
 
-}
-
-//  Destructor Pedido
-Pedido::~Pedido(){
-
-}
-
-//  Agrega un plato al pedido
-void Pedido::agregar_plato(Plato* plato){
-
-}
-
-//  Retorna la suma del precio de todos los platos del pedido
-int Pedido::precio_total(){
-
-}
-
-/* Funciones clase Registro */
-
-//  Constructor Registro
-Registro::Registro(){
-
-}
-
-//  Destructor Registro
-Registro::~Registro(){
-}
-
-//  Agrega un pedido al registro
-void  Registro::agregar_pedido(Pedido* pedido){
-
-}
-
-//  Retorna el pedido segun id y tipo (servir True , llevar False)
-Pedido::Pedido* get_pedido(){
-
-}
-
-//  Eliminia el pedido segun id y tipo
-Pedido::Pedido* eliminar_pedido(){
-
-}
+class Registro{
+    private:
+        Pedido* pedidos; // arreglo de pedidos, tamaño inicial n (cantidad de mesas)
+        size_t size;
+        void ajustar_arreglo(); //ajusta el tamaño de la tabla de hashing
+        int ganancias;
+    public:
+        Registro();
+        ~Registro();
+        void agregar_pedido(Pedido* pedido);
+        Pedido* get_pedido(int id, bool tipo); // Retorna el pedido según id y tipo (servir true
+        // llevar false)
+        Pedido* eliminar_pedido(int id, bool tipo); // Elimina el pedido según id y tipo
+};
 
 #endif 
