@@ -1,178 +1,103 @@
 #include <iostream>
 #include <string>
-#include <iomanip>
+#include <fstream>
 
-using namespace std;
-
-// ****
-// * Estructura Plato
-// ****
-// * Representa un plato en el menú con su nombre y precio.
-// ****
 struct Plato {
-    string nombre; // Nombre del plato
-    int precio;    // Precio del plato
+    std::string nombre;
+    int precio;
 };
 
-// ****
-// * Clase Pedido
-// ****
-// * Representa un pedido en el restaurante.
-// ****
 class Pedido {
 private:
-    Plato* platos;       // Arreglo dinámico de platos (máximo 25)
-    size_t cant_platos;  // Número de platos en el pedido
-    bool servir;         // true: servir, false: para llevar
-    static const int MAX_PLATOS = 25; // Límite de platos por pedido
+    Plato* platos; // Array of dishes in the order, initial size 25
+    bool servir; // true for serving, false for takeout
+    size_t cant_platos;
 
 public:
-    // Constructor
-    Pedido(bool tipo_servir = true) {
-        this->servir = tipo_servir;
-        this->cant_platos = 0;
-        this->platos = new Plato[MAX_PLATOS]; // Inicializar el arreglo de platos
-    }
+    Pedido() : platos(new Plato[25]), servir(true), cant_platos(0) {} // Constructor
+    ~Pedido() { delete[] platos; } // Destructor
 
-    // Destructor
-    ~Pedido() {
-        delete[] platos; // Liberar memoria del arreglo dinámico
-    }
-
-    // ****
-    // * void agregar_plato
-    // ****
-    // * Agrega un plato al pedido, verificando que no exceda el límite.
-    // ****
-    void agregar_plato(Plato* plato) {
-        if (cant_platos < MAX_PLATOS) {
-            platos[cant_platos++] = *plato; // Copiar el plato al arreglo
+    void agregar_plato(const Plato& plato) {
+        if (cant_platos < 25) {
+            platos[cant_platos++] = plato; // Add the dish to the order
         } else {
-            cout << "El pedido ha alcanzado el límite de platos.\n";
+            std::cerr << "Error: No more space to add plates." << std::endl;
         }
     }
 
-    // ****
-    // * int precio_total
-    // ****
-    // * Calcula y retorna la suma de los precios de todos los platos del pedido.
-    // ****
-    int precio_total() const {
+    int precio_total() {
         int total = 0;
-        for (size_t i = 0; i < cant_platos; ++i) {
-            total += platos[i].precio;
+        for (size_t i = 0; i < cant_platos; i++) {
+            total += platos[i].precio; // Sum the prices of all dishes
         }
         return total;
     }
 
-    // ****
-    // * void mostrar_pedido
-    // ****
-    // * Muestra el contenido del pedido y su precio total.
-    // ****
-    void mostrar_pedido() const {
-        cout << (servir ? "Pedido para servir:\n" : "Pedido para llevar:\n");
-        for (size_t i = 0; i < cant_platos; ++i) {
-            cout << "- " << platos[i].nombre << ": $" << platos[i].precio << '\n';
+    void mostrar_pedido() {
+        std::cout << "Platos en el pedido:" << std::endl;
+        for (size_t i = 0; i < cant_platos; i++) {
+            std::cout << platos[i].nombre << " - $" << platos[i].precio << std::endl;
         }
-        cout << "Total: $" << precio_total() << "\n\n";
     }
 };
 
-// ****
-// * Clase Registro
-// ****
-// * Maneja la tabla hash de pedidos.
-// ****
-class Registro {
-private:
-    Pedido* pedidos;    // Arreglo dinámico de pedidos
-    size_t size;        // Tamaño actual de la tabla
-    int ganancias;      // Ganancias totales del día
-
-    // Ajusta el tamaño de la tabla de hashing (no implementado aquí)
-    void ajustar_arreglo() {
-        // Código para redimensionar la tabla según el factor de carga
-    }
-
-public:
-    // Constructor
-    Registro(size_t n) {
-        this->size = n; // Tamaño inicial basado en el número de mesas
-        this->ganancias = 0;
-        this->pedidos = new Pedido[n]; // Crear arreglo dinámico
-    }
-
-    // Destructor
-    ~Registro() {
-        delete[] pedidos; // Liberar memoria del arreglo
-    }
-
-    // ****
-    // * void agregar_pedido
-    // ****
-    // * Agrega un nuevo pedido al registro.
-    // ****
-    void agregar_pedido(Pedido* pedido, int id) {
-        if (id >= 0 && id < size) {
-            pedidos[id] = *pedido;
-        } else {
-            cout << "ID fuera de rango.\n";
-        }
-    }
-
-    // ****
-    // * Pedido* get_pedido
-    // ****
-    // * Retorna un pedido según el ID y tipo (servir o llevar).
-    // ****
-    Pedido* get_pedido(int id, bool tipo) {
-        if (id >= 0 && id < size) {
-            return &pedidos[id];
-        }
-        return nullptr; // Pedido no encontrado
-    }
-
-    // ****
-    // * Pedido* eliminar_pedido
-    // ****
-    // * Elimina un pedido y actualiza las ganancias.
-    // ****
-    Pedido* eliminar_pedido(int id, bool tipo) {
-        if (id >= 0 && id < size) {
-            Pedido* pedido = &pedidos[id];
-            ganancias += pedido->precio_total();
-            // Aquí podría manejarse la eliminación (e.g., marcar como vacío)
-            return pedido;
-        }
-        return nullptr;
-    }
-};
-
-// ****
-// * Main: Pruebas iniciales
-// ****
 int main() {
-    // Crear platos
-    Plato plato1 = {"Pad Thai", 10000};
-    Plato plato2 = {"Pho", 10500};
-    Plato plato3 = {"Gohan", 8000};
+    const int MAX_PLATOS = 100; // Max number of dishes in the menu
+    Plato menu[MAX_PLATOS]; // Array to hold the menu
+    int num_platos = 0; // Number of dishes read from the menu file
 
-    // Crear un pedido
-    Pedido pedido1(true);
-    pedido1.agregar_plato(&plato1);
-    pedido1.agregar_plato(&plato2);
-    pedido1.mostrar_pedido();
-
-    // Crear registro con 5 mesas
-    Registro registro(5);
-    registro.agregar_pedido(&pedido1, 0);
-
-    // Obtener y mostrar el pedido
-    Pedido* p = registro.get_pedido(0, true);
-    if (p) {
-        p->mostrar_pedido();
+    std::ifstream archivo("Menu.txt");
+    if (!archivo) {
+        std::cerr << "Error: No se pudo abrir el archivo Menu.txt" << std::endl;
+        return 1;
     }
 
+    // Read dishes from the menu file
+    std::string linea;
+    while (std::getline(archivo, linea) && num_platos < MAX_PLATOS) {
+        size_t comma_pos = linea.find('-');
+        if (comma_pos != std::string::npos) {
+            std::string nombre = linea.substr(0, comma_pos); // Get the name
+            std::string precio_str = linea.substr(comma_pos + 1); // Get the price part
+
+            try {
+                int precio = std::stoi(precio_str); // Convert price to integer
+                menu[num_platos++] = {nombre, precio}; // Store the Plato in the menu
+            } catch (const std::invalid_argument&) {
+                std::cerr << "Error: Precio inválido en la línea: " << linea << std::endl;
+            } catch (const std::out_of_range&) {
+                std::cerr << "Error: Precio fuera de rango en la línea: " << linea << std::endl;
+            }
+        } else {
+            std::cerr << "Error: Formato de línea inválido: " << linea << std::endl;
+        }
+    }
+
+    archivo.close();
+
+    // Display the menu to the user
+    std::cout << "Menu:" << std::endl;
+    for (int i = 0; i < num_platos; i++) {
+        std::cout << i + 1 << ". " << menu[i].nombre << " - $" << menu[i].precio << std::endl;
+    }
+
+    Pedido pedido; // Create a new Pedido
+    int opcion;
+    std::cout << "Ingrese el número del plato que desea agregar al pedido (0 para finalizar): " << std::endl;
+    while (true) {
+        std::cin >> opcion;
+        if (opcion == 0) {
+            break; // Exit the loop if the user inputs 0
+        }
+        if (opcion > 0 && opcion <= num_platos) {
+            pedido.agregar_plato(menu[opcion - 1]); // Add the selected dish to the order
+            std::cout << "Plato agregado: " << menu[opcion - 1].nombre << std::endl;
+        } else {
+            std::cerr << "Opción inválida. Intente de nuevo." << std::endl;
+        }
+    }
+
+    // Output total price of the order
+    pedido.mostrar_pedido();
     return 0;
 }

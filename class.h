@@ -26,6 +26,7 @@ class Registro{
         void ajustar_arreglo(); //ajusta el tamaño de la tabla de hashing
         int ganancias;
     public:
+        void Ingreso_mesas(int numero_mesas);
         Registro();
         ~Registro();
         void agregar_pedido(Pedido* pedido);
