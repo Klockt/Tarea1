@@ -43,6 +43,7 @@ int main() {
 
     Registro registro;
     registro.Ingreso_mesas(numero_mesas);
+    int id_llevar = 0;
     string funcion, input, variable;
 
     // Ciclo de comandos
@@ -57,22 +58,35 @@ int main() {
             // crea un pedido
             size_t pos = variable.find(" ");
             string tipo_pedido = variable.substr(0 , pos);
-            string numero = variable.substr(pos + 1);
-            int id = stoi(numero);
+            int id;
+            if (tipo_pedido == "llevar") {
+                id = ++id_llevar;
+            } else {
+                string numero = variable.substr(pos + 1);
+                id = stoi(numero);
+            }
             cout << id << "  " << tipo_pedido << endl;
             registro.Registrar_pedido(id, tipo_pedido);
 
         }
         else if (funcion == "info") {
             // muestra la informacion del pedido
+            size_t pos = variable.find(" ");
+            string tipo_pedido = variable.substr(0 , pos);
+            string numero = variable.substr(pos + 1);
+            int id = stoi(numero);
+            registro.get_pedido(id, tipo_pedido);
         }
         else if  (funcion == "pagar") {
             // paga el pedido
+            size_t pos = variable.find(" ");
+            string tipo_pedido = variable.substr(0 , pos);
+            string numero = variable.substr(pos + 1);
+            int id = stoi(numero);
+            registro.get_pedido(id, tipo_pedido);
         }
         else if (funcion  == "cerrar"){
-            // cierra el pedido
-        }
-        else if (funcion == "0") {
+            // cierra el programa
             break;
         }
     }
