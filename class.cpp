@@ -2,11 +2,12 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+using namespace std;
 
 /* Funciones clase Pedido */
 
 //  Constructor Pedido
-Pedido::Pedido() : platos(new Plato[25]), servir(true), cant_platos(0) {}
+Pedido::Pedido() : platos(new Plato[25]), servir(true), cant_platos(0) {} // 25 platos maximos
 
 //  Destructor Pedido
 Pedido::~Pedido() {
@@ -16,7 +17,7 @@ Pedido::~Pedido() {
 //  Agrega un plato al pedido
 void Pedido::agregar_plato(Plato* plato){
     if (cant_platos < 25) {
-        platos[cant_platos++] = plato;
+        platos[cant_platos++] = *plato;
         } 
     else {
             cerr << "El pedido ya está completo." << endl;
