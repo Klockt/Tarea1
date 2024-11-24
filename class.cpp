@@ -36,6 +36,11 @@ int Pedido::precio_total(){
 
 /* Funciones clase Registro */
 
+void Registro::ajustar_arreglo(){ // ajusta el arreglo de pedidos en el hash
+
+}
+
+
 //  Constructor Registro
 Registro::Registro() : pedidos(new Pedido[100]), size(0), ganancias(0) {}
 
