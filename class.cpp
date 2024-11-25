@@ -6,6 +6,16 @@ using namespace std;
 
 /* Funciones clase Pedido */
 
+void Pedido::get_nombre() {
+    for (size_t i = 0; i < cant_platos; ++i) {
+        cout << platos[i].nombre << endl;
+    }
+}
+
+int Pedido::get_cant_platos() {
+    return cant_platos;
+}
+
 void Pedido::set_id(int valor){
     id_pedido = valor;
 }
@@ -27,9 +37,13 @@ Pedido::~Pedido() {
     delete[] platos;
 }
 
+void Pedido::set_cant_platos(){
+    cant_platos++;
+}
 
 //  Agrega un plato al pedido
 void Pedido::agregar_plato(Plato* plato){
+    cout << "agregar plato" << endl;
     if (cant_platos < 25) {
         platos[cant_platos] = *plato;
         cant_platos++;
@@ -107,7 +121,8 @@ void Registro::agregar_pedido(Pedido* pedido){
 Pedido* Registro::get_pedido(int id, bool tipo){
     for (size_t i = 0; i < size; i++) {
         if ( pedidos[i].get_id() == id && pedidos[i].get_servir() == tipo ){
-            return pedidos[i]* ;
+            cout << "pedido encontrado" << endl;
+            return &pedidos[i]; 
         }
     }
     return nullptr;
@@ -116,13 +131,6 @@ Pedido* Registro::get_pedido(int id, bool tipo){
 
 //  Eliminia el pedido segun id y tipo
 Pedido* Registro::eliminar_pedido(int id, bool tipo){
-    for (size_t i = 0; i < size; i++) {
-        if ( pedidos[i]!=nullptr && pedidos[i]->get_id() == id && pedidos[i]->get_servir() == tipo){
-            Pedido* aux = pedidos[i];
-            pedidos[i] = nullptr;
-            return aux;
-        }
-    }    
     return nullptr;
 }
 
@@ -136,24 +144,49 @@ void Registro::Registrar_pedido(int id, bool tipo, Plato* menu){
         getline(cin, entrada);
         size_t pos = entrada.find(" ");
         string funcion = entrada.substr(0, pos);
-        string nuevo_plato = entrada.substr(pos + 1);
         if (funcion == "pedir"){
+            if (tipo){
+                cout << "Servir " << id << " Registrado" << endl;
+            }else {
+                cout << "Llevar " << id << " Registrado" << endl;
+            }
             break;
         }
         else {
-            for (int i = 0 ; i < menu[i].nombre; i++){
+            string nuevo_plato = entrada.substr(pos + 1);
+            int i = 0;
+            bool flag = true;
+            while (flag) {
                 if (menu[i].nombre == nuevo_plato){
-                    nuevo_pedido.agregar_plato(menu[i]);
-                    nuevo_pedido.cant_platos ++;
+                    Plato* plato_seleccionado = &menu[i];
+                    nuevo_pedido.agregar_plato(plato_seleccionado);
+                    nuevo_pedido.set_cant_platos();
+                    flag = false;
                 }
+                i++;
             }
         }
-    agregar_pedido(nuevo_pedido); 
-    cout << "Pedido agregado con exito" << endl;
-        
+    Pedido* nuevo_pedido_ptr = new Pedido(nuevo_pedido);
+    agregar_pedido(nuevo_pedido_ptr); 
     }
 }
 
 int Registro::f_hash(int id){
     return id % size;
+}
+
+void Registro::cerrar() {
+    cout << "Pedidos pendientes:\n";
+    for (size_t i = 0; i < size; i++) {
+        if (pedidos[i].precio_total() > 0) { // Si el pedido tiene platos
+            cout << (pedidos[i].get_servir() ? "Mesa " : "Llevar ") << pedidos[i].get_id() << "\n";
+        }
+    }
+    int ganancias = 0;
+    cout << "Ganancias del día: " << ganancias << " CLP\n";
+
+    // Liberar memoria dinámica
+    delete[] pedidos;
+
+    std::cout << "Sistema cerrado. ¡Gracias por usar el sistema de pedidos!\n";
 }

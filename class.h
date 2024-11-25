@@ -14,9 +14,11 @@ class Pedido{
         size_t cant_platos;
         int id_pedido;
     public:
+        void get_nombre();
         void set_id(int valor);
         void set_servir(bool tipo);
         int get_id();
+        void set_cant_platos();
         bool get_servir();
         Pedido();
         ~Pedido();
@@ -31,6 +33,7 @@ class Registro{
         void ajustar_arreglo(); //ajusta el tamaño de la tabla de hashing
         int ganancias;
     public:
+        void cerrar();
         void Registrar_pedido(int id, bool tipo, Plato* menu);
         int f_hash(int id); // retorna la posición en la que se encuentra el pedido en la tabla de hashing
         void Ingreso_mesas(int numero_mesas);

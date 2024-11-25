@@ -77,7 +77,11 @@ int main() {
             string tipo_pedido = variable.substr(0 , pos);
             string numero = variable.substr(pos + 1);
             int id = stoi(numero);
-            registro.get_pedido(id, tipo);
+            Pedido* info_pedido = registro.get_pedido(id, tipo);
+            for (size_t i = 0; i < info_pedido->get_cant_platos(); ++i) {
+                    cout << "- " << info_pedido->get_nombre(i) << "\n";
+            }
+            cout << info_pedido->precio_total() << endl;
         }
         else if  (funcion == "pagar") {
             // paga el pedido
@@ -89,6 +93,7 @@ int main() {
         }
         else if (funcion  == "cerrar"){
             // cierra el programa
+            registro.cerrar();
             break;
         }
     }
