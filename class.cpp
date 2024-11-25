@@ -7,8 +7,7 @@ using namespace std;
 /* Funciones clase Pedido */
 
 string Pedido::get_nombre(int i) {
-    if (platos[i].nombre=="") {
-        cout << "aweonao" << endl;
+    if (platos[i].nombre== "" ) {
         return "";
 
     } else {
@@ -16,6 +15,7 @@ string Pedido::get_nombre(int i) {
         return "";
     }
 }
+
 
 int Pedido::get_cant_platos() {
     return cant_platos;
@@ -76,7 +76,7 @@ void Registro::ajustar_arreglo(){ // ajusta el arreglo de pedidos en el hash
         // Copiar pedidos existentes al nuevo arreglo
     for (size_t i = 0; i < size; ++i) {
         if (pedidos[i].precio_total() > 0) { // Solo copiar pedidos válidos
-            int nuevo_index = f_hash(pedidos[i].get_id()); // Suponiendo que tienes un método get_id()
+            int nuevo_index = f_hash(pedidos[i].get_id()); 
             while (nuevos_pedidos[nuevo_index].precio_total() > 0) {
                 nuevo_index = (nuevo_index + 1) % nuevo_size; // Sondeo lineal
             }
@@ -114,12 +114,12 @@ void Registro::agregar_pedido(Pedido* pedido){
         index = (index + 1 ) % size;
     }
     pedidos[index] = *pedido;
-     if ((index + 1) / static_cast<double>(size) > 0.8) { // Factor de carga (Revisar)
+     if ((index + 1) / static_cast<double>(size) > 0.8) { // Factor de carga 
             ajustar_arreglo();
         }
 
     
-}// EXPERIMENTANDO
+}
 
 
 //  Retorna el pedido segun id y tipo (servir True , llevar False)
