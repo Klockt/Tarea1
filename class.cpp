@@ -6,9 +6,14 @@ using namespace std;
 
 /* Funciones clase Pedido */
 
-void Pedido::get_nombre() {
-    for (size_t i = 0; i < cant_platos; ++i) {
-        cout << platos[i].nombre << endl;
+string Pedido::get_nombre(int i) {
+    if (platos[i].nombre=="") {
+        cout << "aweonao" << endl;
+        return "";
+
+    } else {
+        cerr << "Índice fuera de rango: " << i << endl;
+        return "";
     }
 }
 
@@ -43,7 +48,6 @@ void Pedido::set_cant_platos(){
 
 //  Agrega un plato al pedido
 void Pedido::agregar_plato(Plato* plato){
-    cout << "agregar plato" << endl;
     if (cant_platos < 25) {
         platos[cant_platos] = *plato;
         cant_platos++;
@@ -94,6 +98,7 @@ Registro::Registro() : pedidos(new Pedido[1]), size(0), ganancias(0) {}
 Registro::~Registro(){
     delete[] pedidos;
 }
+
 
 // Constructor por numero de mesas
 void Registro::Ingreso_mesas(int numero_mesas){
@@ -167,6 +172,7 @@ void Registro::Registrar_pedido(int id, bool tipo, Plato* menu){
             }
         }
     Pedido* nuevo_pedido_ptr = new Pedido(nuevo_pedido);
+    cout << nuevo_pedido_ptr->get_nombre(1) << endl;
     agregar_pedido(nuevo_pedido_ptr); 
     }
 }
@@ -176,17 +182,15 @@ int Registro::f_hash(int id){
 }
 
 void Registro::cerrar() {
+    int ganancias = 0;
     cout << "Pedidos pendientes:\n";
     for (size_t i = 0; i < size; i++) {
         if (pedidos[i].precio_total() > 0) { // Si el pedido tiene platos
+        ganancias += pedidos[i].precio_total();
             cout << (pedidos[i].get_servir() ? "Mesa " : "Llevar ") << pedidos[i].get_id() << "\n";
         }
     }
-    int ganancias = 0;
-    cout << "Ganancias del día: " << ganancias << " CLP\n";
-
+    cout << "Ganancias del día: " << ganancias << endl;
     // Liberar memoria dinámica
     delete[] pedidos;
-
-    std::cout << "Sistema cerrado. ¡Gracias por usar el sistema de pedidos!\n";
 }

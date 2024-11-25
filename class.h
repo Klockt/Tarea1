@@ -14,7 +14,8 @@ class Pedido{
         size_t cant_platos;
         int id_pedido;
     public:
-        void get_nombre();
+        int get_cant_platos();
+        std::string get_nombre(int i);
         void set_id(int valor);
         void set_servir(bool tipo);
         int get_id();
