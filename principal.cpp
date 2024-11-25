@@ -53,20 +53,22 @@ int main() {
         size_t pos = input.find(" ");
         funcion = input.substr(0, pos);
         variable = input.substr(pos + 1);
-
-        if  (funcion == "registrar") {
+        bool tipo;
+         if  (funcion == "registrar") {
             // crea un pedido
             size_t pos = variable.find(" ");
             string tipo_pedido = variable.substr(0 , pos);
             int id;
             if (tipo_pedido == "llevar") {
+                tipo = false;
                 id = ++id_llevar;
             } else {
                 string numero = variable.substr(pos + 1);
                 id = stoi(numero);
+                tipo = true;
             }
             cout << id << "  " << tipo_pedido << endl;
-            registro.Registrar_pedido(id, tipo_pedido);
+            registro.Registrar_pedido(id, tipo, menu);
 
         }
         else if (funcion == "info") {
@@ -75,7 +77,7 @@ int main() {
             string tipo_pedido = variable.substr(0 , pos);
             string numero = variable.substr(pos + 1);
             int id = stoi(numero);
-            registro.get_pedido(id, tipo_pedido);
+            registro.get_pedido(id, tipo);
         }
         else if  (funcion == "pagar") {
             // paga el pedido
@@ -83,7 +85,7 @@ int main() {
             string tipo_pedido = variable.substr(0 , pos);
             string numero = variable.substr(pos + 1);
             int id = stoi(numero);
-            registro.get_pedido(id, tipo_pedido);
+            registro.get_pedido(id, tipo);
         }
         else if (funcion  == "cerrar"){
             // cierra el programa

@@ -106,8 +106,8 @@ void Registro::agregar_pedido(Pedido* pedido){
 //  Retorna el pedido segun id y tipo (servir True , llevar False)
 Pedido* Registro::get_pedido(int id, bool tipo){
     for (size_t i = 0; i < size; i++) {
-        if ( pedidos[i]!=nullptr && pedidos[i]->get_id() == id && pedidos[i]->get_servir() == tipo ){
-            return pedidos[i];
+        if ( pedidos[i].get_id() == id && pedidos[i].get_servir() == tipo ){
+            return pedidos[i]* ;
         }
     }
     return nullptr;

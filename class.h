@@ -12,7 +12,12 @@ class Pedido{
         Plato* platos; // arreglo de platos en el pedido, tamaño inicial 25
         bool servir; // true para servir, false para llevar
         size_t cant_platos;
+        int id_pedido;
     public:
+        void set_id(int valor);
+        void set_servir(bool tipo);
+        int get_id();
+        bool get_servir();
         Pedido();
         ~Pedido();
         void agregar_plato(Plato* plato); // agrega un plato al pedido
@@ -26,6 +31,8 @@ class Registro{
         void ajustar_arreglo(); //ajusta el tamaño de la tabla de hashing
         int ganancias;
     public:
+        void Registrar_pedido(int id, bool tipo, Plato* menu);
+        int f_hash(int id); // retorna la posición en la que se encuentra el pedido en la tabla de hashing
         void Ingreso_mesas(int numero_mesas);
         Registro();
         ~Registro();
