@@ -8,9 +8,9 @@ hexa = r'^[0-9A-F]+$'
 template = "Ingresa una acción!\nw:moverse hacia arriba\ns:moverse hacia abajo\na:moverse a la izquierda\nd:moverse a la derecha\n-l:salir\n"
 template2 = "Escribe la cantidad de pasos que quieres moverte hacia {} en formato {}: "
 move = {"w":"arriba", "s":"abajo", "a":"la izquierda", "d":"la derecha"}
-
+snake_status = "alive" # alive, dead, hacking
+snake_position = {"X": 5, "Y": 0}
 #------------------#
-
 
 def matrix( large, guards ):
     '''
@@ -101,36 +101,53 @@ def hex(hex_str):
         count += 1
     return total
 
-def snake_mov():
+def snake_collision():
+    snake = mx_b[snake_position["X"], snake_position["Y"]]
+    global snake_status
+    if snake == "!":
+        snake_status = "dead"
+        mx_b[snake_position["X"], snake_position["Y"]] = 'RIP'
+
+def snake_mov(direction, steps):  # X : Filas , Y : Columnas
+    mx_b[snake_position["X"], snake_position["Y"]] = 'X'
+    count = 1
+    if direction == "w":
+        while count <= steps and snake_status == "alive":
+            if snake_position["X"] - 1 >= 0:
+                snake_position["X"] = snake_position["X"] - 1
+                snake_collision()
+
     return
 
 def main():
     large = int (input( "Ingresar largo de los pasillos: "))
     guards = int (input( "Ingresar cantidad de guardias: "))
+    global mx_b
     mx_b = matrix( large, guards ) 
     for list in mx_b:
         list = "".join(list)
         print(list)
     direction = (input(template))
-    while direction != "-l": # Mientras no se ejecute comando -l o snake viva o llegue al punto este while debera seguir (idea)
+    while direction != "-l" and snake_status == "alive": # Mientras no se ejecute comando -l o snake viva o llegue al punto este while debera seguir (idea)
+
         if large <= 20:
             steps = input(template2.format((move[direction]), "Binario"))
             while not re.match(binario, steps): # Para que no se cuele otra wea que no sea binario 8======D
                 steps = input(template2.format((move[direction]), "Binario"))
-            decimal = binary(steps)
-            print(decimal)
+            snake_mov(direction, binary(steps))
+
         elif large > 20 and large <= 100:
             steps = input(template2.format((move[direction]), "Octal"))
             while not re.match(binario, steps):
                 steps = input(template2.format((move[direction]), "Octal"))
             decimal = oct(steps)
-            print(decimal)
+            
         elif large > 100:
             steps = input(template2.format((move[direction]), "Hexadecimal"))
             while not re.match(binario, steps):
                 steps = input(template2.format((move[direction]), "Hexadecimal"))
             decimal = hex(steps)
-            print(decimal)
+            
         direction = (input(template))
     return
 
