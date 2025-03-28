@@ -1,9 +1,14 @@
 import random
+import re
 
 #Variables globales#
 binario = r'^[01]+$'
 octal = r'^[0-7]+$'
 hexa = r'^[0-9A-F]+$'
+template = "Ingresa una acción!\nw:moverse hacia arriba\ns:moverse hacia abajo\na:moverse a la izquierda\nd:moverse a la derecha\n-l:salir\n"
+template2 = "Escribe la cantidad de pasos que quieres moverte hacia {} en formato {}: "
+move = {"w":"arriba", "s":"abajo", "a":"la izquierda", "d":"la derecha"}
+
 #------------------#
 
 
@@ -35,15 +40,66 @@ def matrix( large, guards ):
         i += 1
     return mx_base
 
-def binary():
-    
-    return
+def binary(bin_str):  # bin_str = "1101"
+    '''
+    ***
+    bin_str : str
+    ***
+    total : int
+    ***
+    realiza la conversion de binario a decimal, retornando un entero
+    '''
+    count, total = 0, 0
+    for bit in bin_str[::-1]:  # [::-1] invierte el string bin_str = "1011"
+        bit = int(bit)
+        total += bit * (2**count)
+        count += 1
+    return total
 
-def oct():
-    return
+def oct(oct_str):
+    '''
+    ***
+    oct_str : str
+    ***
+    total : int
+    ***
+    realiza la conversion de octal a decimal, retornando un entero
+    '''
+    count, total = 0, 0
+    for bit3 in oct_str[::-1]:
+        bit3 = int(bit3)
+        total += bit3 * (8**count)
+        count += 1
+    return total
 
-def hex():
-    return
+def hex(hex_str):
+    '''
+    ***
+    hex_str : str
+    ***
+    total : int
+    ***
+    realiza la conversion de binario a hexadecimal, retornando un entero
+    '''
+    count, total = 0, 0
+    for nibble in hex_str[::-1]:
+        if nibble == "A":
+            nibble = 10
+        elif nibble == "B":
+            nibble = 11
+        elif nibble == "C":
+            nibble = 12
+        elif nibble == "D":
+            nibble = 13
+        elif nibble == "E":
+            nibble = 14
+        elif nibble == "F":
+            nibble = 15
+        else:
+            nibble = int(nibble)
+        total += nibble * (16**count)
+        count += 1
+    return total
 
 def snake_mov():
     return
@@ -55,16 +111,28 @@ def main():
     for list in mx_b:
         list = "".join(list)
         print(list)
-
-    if large < 20:
-        binary()
-    elif large > 20 and large < 100:
-        oct()
-    elif large > 100:
-        hex()
+    direction = (input(template))
+    while direction != "-l": # Mientras no se ejecute comando -l o snake viva o llegue al punto este while debera seguir (idea)
+        if large <= 20:
+            steps = input(template2.format((move[direction]), "Binario"))
+            while not re.match(binario, steps): # Para que no se cuele otra wea que no sea binario 8======D
+                steps = input(template2.format((move[direction]), "Binario"))
+            decimal = binary(steps)
+            print(decimal)
+        elif large > 20 and large <= 100:
+            steps = input(template2.format((move[direction]), "Octal"))
+            while not re.match(binario, steps):
+                steps = input(template2.format((move[direction]), "Octal"))
+            decimal = oct(steps)
+            print(decimal)
+        elif large > 100:
+            steps = input(template2.format((move[direction]), "Hexadecimal"))
+            while not re.match(binario, steps):
+                steps = input(template2.format((move[direction]), "Hexadecimal"))
+            decimal = hex(steps)
+            print(decimal)
+        direction = (input(template))
     return
-
-
 
 if __name__ == "__main__":
     main()
