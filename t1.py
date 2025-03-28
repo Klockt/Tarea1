@@ -1,5 +1,12 @@
 import random
 
+#Variables globales#
+binario = r'^[01]+$'
+octal = r'^[0-7]+$'
+hexa = r'^[0-9A-F]+$'
+#------------------#
+
+
 def matrix( large, guards ):
     '''
     ***
@@ -28,6 +35,18 @@ def matrix( large, guards ):
         i += 1
     return mx_base
 
+def binary():
+    
+    return
+
+def oct():
+    return
+
+def hex():
+    return
+
+def snake_mov():
+    return
 
 def main():
     large = int (input( "Ingresar largo de los pasillos: "))
@@ -36,7 +55,13 @@ def main():
     for list in mx_b:
         list = "".join(list)
         print(list)
-    
+
+    if large < 20:
+        binary()
+    elif large > 20 and large < 100:
+        oct()
+    elif large > 100:
+        hex()
     return
 
 
