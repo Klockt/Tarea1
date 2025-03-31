@@ -9,7 +9,9 @@ octal = r'^[0-7]+$'
 hexa = r'^[0-9A-F]+$'
 template = "Ingresa una acción!\nw:moverse hacia arriba\ns:moverse hacia abajo\na:moverse a la izquierda\nd:moverse a la derecha\n-1:salir\n"
 template2 = "Escribe la cantidad de pasos que quieres moverte hacia {} en formato {}: "
+template3 = "Esta transmisión contiene un código {} crítico: {}."
 move = {"w":"arriba", "s":"abajo", "a":"la izquierda", "d":"la derecha", "-1":"salir"}
+hex_to_decimal = {"A": 10, "B": 11, "C": 12, "D": 13, "E": 14, "F": 15}
 snake_status = "alive" # alive, dead, hacking
 snake_position = {"X": 5, "Y": 0}
 #------------------#
@@ -19,6 +21,7 @@ def print_board():
     os.system("clear")  
     for list in mx_b:
         print("".join(list))
+    print("\n")
     if snake_status == "dead":
         print("\033[31mSnaaaake! Snaaaaaake!\033[0m\nGame Over")
     elif snake_status == "hacking":
@@ -52,6 +55,13 @@ def matrix( large, guards ):
             mx_base[x][y] = '\033[31m!\033[0m' # ! EN ROJO
         i += 1
     return mx_base
+
+def generate_bin(decimal):
+    bin_str = ""
+    while decimal != 0:
+        bin_str += str(decimal % 2)
+        decimal //= 2
+    return bin_str[::-1]
 
 def binary(bin_str):  # bin_str = "1101"
     '''
@@ -96,18 +106,8 @@ def hex(hex_str):
     '''
     count, total = 0, 0
     for nibble in hex_str[::-1]:
-        if nibble == "A":
-            nibble = 10
-        elif nibble == "B":
-            nibble = 11
-        elif nibble == "C":
-            nibble = 12
-        elif nibble == "D":
-            nibble = 13
-        elif nibble == "E":
-            nibble = 14
-        elif nibble == "F":
-            nibble = 15
+        if nibble in hex_to_decimal:
+            nibble = hex_to_decimal[nibble]
         else:
             nibble = int(nibble)
         total += nibble * (16**count)
@@ -193,6 +193,25 @@ def main():
             direction = (input(template))
             while direction not in move:
                 direction = (input(template))
+
+    if snake_status == "hacking":
+
+        if large <= 20:        
+            range = random.randint(0, 20) 
+            code = generate_bin(range)
+            print(template3.format("Binario", code))
+            msj = input("Desencripta el mensaje y entrega el número decimal equivalente: ")
+            if not re.match(r'^[0-9]+$', msj):
+                snake_status = "dead"
+            elif code == generate_bin(int(msj)):
+                snake_status = "win"
+            else:
+                snake_status = "dead"
+        elif large > 20 and large <= 100:
+            range = random.randint(0, 100)
+        elif large > 100:
+            range = random.randint(0, 500)
+        
     return
 
 if __name__ == "__main__":
