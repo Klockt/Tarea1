@@ -43,7 +43,7 @@ def matrix( large, guards ):
 def binary(bin_str):  # bin_str = "1101"
     '''
     ***
-    bin_str : str
+    bin_str : str.
     ***
     total : int
     ***
