@@ -1,16 +1,29 @@
 import random
 import re
+import os
+import time
 
 #Variables globales#
 binario = r'^[01]+$'
 octal = r'^[0-7]+$'
 hexa = r'^[0-9A-F]+$'
-template = "Ingresa una acción!\nw:moverse hacia arriba\ns:moverse hacia abajo\na:moverse a la izquierda\nd:moverse a la derecha\n-l:salir\n"
+template = "Ingresa una acción!\nw:moverse hacia arriba\ns:moverse hacia abajo\na:moverse a la izquierda\nd:moverse a la derecha\n-1:salir\n"
 template2 = "Escribe la cantidad de pasos que quieres moverte hacia {} en formato {}: "
-move = {"w":"arriba", "s":"abajo", "a":"la izquierda", "d":"la derecha", "-l":"salir"}
+move = {"w":"arriba", "s":"abajo", "a":"la izquierda", "d":"la derecha", "-1":"salir"}
 snake_status = "alive" # alive, dead, hacking
 snake_position = {"X": 5, "Y": 0}
 #------------------#
+
+# Función para limpiar la consola
+def print_board():
+    os.system("clear")  
+    for list in mx_b:
+        print("".join(list))
+    if snake_status == "dead":
+        print("\033[31mSnaaaake! Snaaaaaake!\033[0m\nGame Over")
+    elif snake_status == "hacking":
+        print("INICIANDO PROTOCOLO...\nAccediendo al sistema enemigo.\nCompilando datos sensibles...\n\033[32m'Snake, esto no tiene vuelta atrás... La misión depende de ti.'\033[0m\n[HACKING EN PROCESO]")
+
 
 def matrix( large, guards ):
     '''
@@ -28,15 +41,15 @@ def matrix( large, guards ):
     while i < 11:
         mx_base.append(['X'] * large)
         if i == 5:
-            mx_base[i][0] = '\033[32mS\033[0m'
+            mx_base[i][0] = '\033[32mS\033[0m' # S EN VERDE
         if i == x:
-            mx_base[i][large - 1] = '\033[33m*\033[0m'
+            mx_base[i][large - 1] = '\033[33m*\033[0m' # * EN AMARILLO
         i += 1
     i = 0
     while i < guards:
         x, y = random.randint(0,10), random.randint(0, large-1)
-        if mx_base[x][y] != 'S' and mx_base[x][y] != '*':
-            mx_base[x][y] = '\033[31m!\033[0m'
+        if mx_base[x][y] != '\033[32mS\033[0m' and mx_base[x][y] != '\033[33m*\033[0m':
+            mx_base[x][y] = '\033[31m!\033[0m' # ! EN ROJO
         i += 1
     return mx_base
 
@@ -104,12 +117,12 @@ def hex(hex_str):
 def snake_collision():
     snake = mx_b[snake_position["X"]][snake_position["Y"]]
     global snake_status
-    if snake == "!":
+    if snake == '\033[31m!\033[0m':
         snake_status = "dead"
-        mx_b[snake_position["X"]][snake_position["Y"]] = 'RIP'
-    elif snake == "*":
-        snake_status = "haking"
-        mx_b[snake_position["X"]][snake_position["Y"]] = '[HACKING]'
+        mx_b[snake_position["X"]][snake_position["Y"]] = '\033[31m[RIP]\033[0m' # RIP EN ROJO
+    elif snake == '\033[33m*\033[0m':
+        snake_status = "hacking"
+        mx_b[snake_position["X"]][snake_position["Y"]] = '\033[31m[H\033[33mA\033[32mC\033[36mK\033[34mI\033[35mN\033[31mG\033[33m]\033[0m' # [HACKING] EN RAINBOW
     return
 
 def snake_mov(direction, steps, large):  # X : Filas , Y : Columnas
@@ -117,29 +130,29 @@ def snake_mov(direction, steps, large):  # X : Filas , Y : Columnas
     count = 1
     if direction == "w":
         while count <= steps and snake_status == "alive":
-            if snake_position["X"] - 1 >= 0:
-                snake_position["X"] = snake_position["X"] - 1
+            if snake_position["X"] - 1 > -1:
+                snake_position["X"] -= 1
                 snake_collision()
             count += 1
     elif direction == "s":
         while count <= steps and snake_status == "alive":
-            if snake_position["X"] + 1 <= 11:
-                snake_position["X"] = snake_position["X"] + 1
+            if snake_position["X"] + 1 < 11:
+                snake_position["X"] += 1
                 snake_collision()
             count += 1
     elif direction == "a":
         while count <= steps and snake_status == "alive":
-            if snake_position["Y"] - 1 >= 0:
-                snake_position["Y"] = snake_position["Y"] - 1
+            if snake_position["Y"] - 1 > -1:
+                snake_position["Y"] -= 1
                 snake_collision()
             count += 1
     elif direction == "d":
         while count <= steps and snake_status == "alive":
             if snake_position["Y"] + 1 < large:
-                snake_position["Y"] = snake_position["Y"] + 1
+                snake_position["Y"] += 1
                 snake_collision()
             count += 1
-    elif snake_status == "alive":
+    if snake_status == "alive":
         mx_b[snake_position["X"]][snake_position["Y"]] = '\033[32mS\033[0m'
     return
 
@@ -154,7 +167,7 @@ def main():
     direction = (input(template))
     while direction not in move:
             direction = (input(template))
-    while direction != "-l" and snake_status == "alive": # Mientras no se ejecute comando -l o snake viva o llegue al punto este while debera seguir (idea)
+    while direction != "-1" and snake_status == "alive": # Mientras no se ejecute comando -1 o snake viva o llegue al punto este while debera seguir (idea)
 
         if large <= 20:
             steps = input(template2.format((move[direction]), "Binario"))
@@ -174,9 +187,12 @@ def main():
                 steps = input(template2.format((move[direction]), "Hexadecimal"))
             snake_mov(direction, hex(steps), large)
         
-        direction = (input(template))
-        while direction not in move:
+        print_board()
+        time.sleep(0.1)
+        if snake_status == "alive":
             direction = (input(template))
+            while direction not in move:
+                direction = (input(template))
     return
 
 if __name__ == "__main__":
