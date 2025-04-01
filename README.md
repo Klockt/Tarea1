@@ -1,19 +1,17 @@
-# Instrucciones de compilación
+# README - Tarea 1: Arqui
 
-Utilizar el compilador g++ en Visual Studio.
+## Autores
 
-# Proceso de compilación
-
-1. Hay que estar conectado a wsl:ubuntu.
-2. Abrir la carpeta descomprimida en Visual Studio.
-3. Para la compilación usar el comando "g++ Tarea1.cpp -o Tarea1 -Wall".
-4. la carpeta .vscode es necesaria para la compilacón de este.
+- **Nombre:** Amaro Alarcón. **Rol:** 202373594-9 **Paralelo:** 201
+- **Nombre:** Máximo Castillo. **Rol:** 202304518-7 **Paralelo:** 200
 
 # Ejecución
 
-Una vez compilado el proyecto:
+1. Hay que estar conectado a WSL:Ubuntu (version 22.04 de preferencia).
+2. Abrir la carpeta descomprimida en Visual Studio.
 
-1. Usar "./Tarea2", en la terminal dentro de la carpeta.
+# Aspectos importantes de la tarea
 
-
+1. Si se ingresa una cantidad de pasos que excede el tamaño del pasillo, Snake se moverá hasta donde le sea posible.
+2. Si se ingresa un carácter no válido en el input, este seguirá solicitando una respuesta hasta que se introduzca un valor permitido.
 

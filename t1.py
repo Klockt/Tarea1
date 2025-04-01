@@ -178,8 +178,15 @@ def snake_mov(direction, steps, large):  # X : Filas , Y : Columnas
     return
 
 def main():
-    large = int (input( "Ingresar largo de los pasillos: "))
-    guards = int (input( "Ingresar cantidad de guardias: "))
+    large = input( "Ingresar largo de los pasillos: ")
+    while not re.match(r'^[1-9][0-9]*$', large):
+        large = input( "Ingresar largo de los pasillos: ")
+    guards = input( "Ingresar cantidad de guardias: ")
+    while not re.match(r'^([1-9][0-9]*|0)$', guards):
+        guards = input( "Ingresar cantidad de guardias: ")
+
+    large, guards = int(large), int(guards)
+
     global mx_b, snake_status
     mx_b = matrix( large, guards ) 
     for list in mx_b:
@@ -188,8 +195,8 @@ def main():
     direction = (input(template))
     while direction not in move:
             direction = (input(template))
+    
     while direction != "-1" and snake_status == "alive": # Mientras no se ejecute comando -1 o snake viva o llegue al punto este while debera seguir (idea)
-
         if large <= 20:
             steps = input(template2.format((move[direction]), "Binario"))
             while not re.match(binario, steps):
@@ -216,7 +223,6 @@ def main():
                 direction = (input(template))
 
     if snake_status == "hacking":
-
         if large <= 20:        
             range = random.randint(0, 20) 
             code = generate_bin(range)
