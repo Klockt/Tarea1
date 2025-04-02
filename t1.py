@@ -19,8 +19,16 @@ snake_status = "alive" # alive, dead, hacking, win
 snake_position = {"X": 5, "Y": 0}
 #------------------#
 
-# Función para limpiar la consola
+
 def print_board():
+    '''
+    ***
+    Sin parametro
+    ***
+    Sin retorno
+    ***
+    Limpia la terminal y limpia el tablero
+    '''
     os.system("clear")  
     for list in mx_b:
         print("".join(list))
@@ -59,6 +67,14 @@ def matrix( large, guards ):
     return mx_base
 
 def generate_bin(decimal):
+    '''
+    ***
+    decimal : int
+    ***
+    binario : str
+    ***
+    convierte un número decimal a binario
+    '''
     bin_str = ""
     while decimal != 0:
         bin_str += str(decimal % 2)
@@ -66,6 +82,14 @@ def generate_bin(decimal):
     return bin_str[::-1]
 
 def generate_oct(decimal):
+    '''
+    ***
+    decimal : int
+    ***
+    octal : str
+    ***
+    convierte un número decimal a octal
+    '''
     oct_str = ""
     while decimal != 0:
         oct_str += str(decimal % 8)
@@ -73,6 +97,14 @@ def generate_oct(decimal):
     return oct_str[::-1]
 
 def generate_hex(decimal):
+    '''
+    ***
+    decimal : int
+    ***
+    hexadecimal : str
+    ***
+    convierte un número decimal a hexadecimal
+    '''
     hex_str = ""
     while decimal != 0:
         rest =decimal % 16
@@ -84,7 +116,7 @@ def generate_hex(decimal):
     return hex_str[::-1]
 
 
-def binary(bin_str):  # bin_str = "1101"
+def binary(bin_str): 
     '''
     ***
     bin_str : str.
@@ -136,6 +168,14 @@ def hex(hex_str):
     return total
 
 def snake_collision():
+    '''
+    ***
+    Sin parametros
+    ***
+    Sin retorno
+    ***
+    Detecta si Snake colisiona con el objetivo o con un guardia
+    '''
     snake = mx_b[snake_position["X"]][snake_position["Y"]]
     global snake_status
     if snake == '\033[31m!\033[0m':
@@ -147,6 +187,16 @@ def snake_collision():
     return
 
 def snake_mov(direction, steps, large):  # X : Filas , Y : Columnas
+    '''
+    ***
+    direction : str
+    steps : int
+    large : int
+    ***
+    Sin retorno
+    ***
+    Mueve a Snake en la dirección especificada
+    '''
     mx_b[snake_position["X"]][snake_position["Y"]] = 'X'
     count = 1
     if direction == "w":
